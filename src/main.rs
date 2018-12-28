@@ -7,13 +7,17 @@ mod material;
 mod frame;
 
 fn main() {
-    let mut point = vec::Vec3{
+    let mut color = vec::Vec3{
         x: 1.,
         y: 2.,
         z: 3.
     };
 
-    point.x = 2.;
+    let mut frame = frame::Frame::new(100, 100);
+    frame.set_pixel(&color, 2, 2);
+    println!("frame pixel count: {}", frame.pixel_count());
+
+    color.x = 2.;
     // println!("{}", point);
 }
 
