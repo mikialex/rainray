@@ -4,6 +4,20 @@ pub struct Vec3 {
     pub z: f32,
 }
 
+impl Vec3{
+    pub fn dot(vecA: &Vec3, vecB: &Vec3) -> f32 {
+        vecA.x * vecB.x +  vecA.y * vecB.y + vecA.z * vecB.z
+    }
+
+    pub fn cross(vecA: &Vec3, vecB: &Vec3) -> Vec3{
+        Vec3{
+            x: vecA.y * vecB.z - vecA.z * vecB.y,
+            y: vecA.x * vecB.z - vecA.z * vecB.x,
+            z: vecA.x * vecB.y - vecA.y * vecB.x,
+        }
+    }
+}
+
 impl std::ops::Add for Vec3 {
     fn add(self, other: Vec3) -> Vec3 {
         Vec3 {

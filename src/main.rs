@@ -7,6 +7,9 @@ mod material;
 mod frame;
 
 fn main() {
+
+    let file_target_path = "/Users/mikialex/Desktop/rainray.png";
+
     let mut color = vec::Vec3{
         x: 1.,
         y: 2.,

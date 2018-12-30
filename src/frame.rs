@@ -38,4 +38,5 @@ impl Frame {
     pub fn pixel_count(&self) -> u32 {
         self.width * self.height
     }
+
 }
