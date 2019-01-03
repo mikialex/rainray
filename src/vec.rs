@@ -5,15 +5,23 @@ pub struct Vec3 {
 }
 
 impl Vec3{
-    pub fn dot(vecA: &Vec3, vecB: &Vec3) -> f32 {
-        vecA.x * vecB.x +  vecA.y * vecB.y + vecA.z * vecB.z
+    pub fn new(x: f32, y: f32, z:f32) -> Vec3{
+        Vec3{
+            x,
+            y,
+            z,
+        }
     }
 
-    pub fn cross(vecA: &Vec3, vecB: &Vec3) -> Vec3{
+    pub fn dot(vec_a: &Vec3, vec_b: &Vec3) -> f32 {
+        vec_a.x * vec_b.x +  vec_a.y * vec_b.y + vec_a.z * vec_b.z
+    }
+
+    pub fn cross(vec_a: &Vec3, vec_b: &Vec3) -> Vec3{
         Vec3{
-            x: vecA.y * vecB.z - vecA.z * vecB.y,
-            y: vecA.x * vecB.z - vecA.z * vecB.x,
-            z: vecA.x * vecB.y - vecA.y * vecB.x,
+            x: vec_a.y * vec_b.z - vec_a.z * vec_b.y,
+            y: vec_a.x * vec_b.z - vec_a.z * vec_b.x,
+            z: vec_a.x * vec_b.y - vec_a.y * vec_b.x,
         }
     }
 }

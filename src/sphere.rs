@@ -1,6 +1,13 @@
-use super::vec::Vec3;
+use crate::vec::Vec3;
+use crate::ray::*;
 
 pub struct Sphere{
-  center: Vec3,
-  radius: f32,
+  pub center: Vec3,
+  pub radius: f32,
+}
+
+impl RayIntersect for Sphere {
+  fn ray_intersect(&self, ray: &Ray) -> bool{
+    false
+  }
 }
