@@ -1,7 +1,7 @@
 
 mod vec;
 mod ray;
-mod object;
+mod model;
 mod sphere;
 mod material;
 mod frame;
