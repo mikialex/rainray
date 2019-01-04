@@ -1,4 +1,5 @@
 use crate::vec::Vec3;
+use crate::material::*;
 
 pub struct Ray {
     pub origin: Vec3,
@@ -24,6 +25,13 @@ impl Ray {
             }
         }
     }
+
+    pub fn from_point_to_point(origin: Vec3, target: Vec3)-> Ray{
+        Ray{
+            origin: origin.clone(),
+            direction: target - origin
+        }
+    }
 }
 
 
@@ -33,5 +41,11 @@ pub trait RayIntersect {
 
 
 pub trait RayTrace {
-    fn next_ray(&self, ray: &Ray) -> Ray;
+    fn next_ray(&self, ray: &Ray, record: &mut RayHitRecord) -> bool;
+}
+
+pub struct RayHitRecord {
+    hit_point: Vec3,
+    hitNormal: Vec3,
+    material: Material,
 }

@@ -1,5 +1,6 @@
 use crate::vec::Vec3;
 use crate::frame::Frame;
+use crate::ray::*;
 
 pub struct Camera {
     frame: Frame,
@@ -20,5 +21,13 @@ impl Camera {
       film_distance: 1.,
       look_at_direction:Vec3::new(0.,0.,-1.)
     }
+  }
+
+  pub fn get_pixel_world_position(&self, x: u32, y: u32) -> Vec3 {
+    Vec3::new(0.,0.,0.)
+  }
+
+  pub fn generate_pixel_ray(&self, x: u32, y: u32) -> Ray{
+    Ray::from_point_to_point(self.eye_position, self.get_pixel_world_position(x, y))
   }
 }

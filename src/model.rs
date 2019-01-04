@@ -8,7 +8,7 @@ pub struct Model<T:RayIntersect>{
 }
 
 impl RayTrace for Model<Sphere>{
-    fn next_ray(&self, ray: &Ray) -> Ray{
-        Ray::new()
+    fn next_ray(&self, ray: &Ray, record: &mut RayHitRecord) -> bool{
+        false
     }
 }

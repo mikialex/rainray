@@ -1,4 +1,7 @@
 use crate::vec::Vec3;
+extern crate image;
+
+pub struct FramePixelData {}
 
 pub struct Frame {
     width: u32,
@@ -38,7 +41,5 @@ impl Frame {
         self.width * self.height
     }
 
-    pub fn write_to_file(&self, path: &str) {
-        
-    }
+    pub fn write_to_file(&self, path: &str) {}
 }
