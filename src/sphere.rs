@@ -6,8 +6,8 @@ pub struct Sphere{
   pub radius: f32,
 }
 
-impl RayIntersect for Sphere {
-  fn ray_intersect(&self, ray: &Ray) -> bool{
+impl Intersecterable for Sphere {
+  fn intersect(&self, ray: &Ray) -> Option<f64>{
     false
   }
 }

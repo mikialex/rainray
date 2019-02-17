@@ -35,8 +35,10 @@ impl Ray {
 }
 
 
-pub trait RayIntersect {
-    fn ray_intersect(&self, ray: &Ray) -> bool;
+pub trait Intersecterable {
+    fn intersect(&self, ray: Ray) -> Option<f64>;
+    fn material(&self) -> Material;
+    fn normal(&self, hit_point: Vec3) -> Vec3;
 }
 
 
