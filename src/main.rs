@@ -2,6 +2,7 @@ mod camera;
 mod frame;
 mod material;
 use crate::camera::*;
+use crate::frame::*;
 mod model;
 mod ray;
 mod sphere;
@@ -32,14 +33,14 @@ fn main() {
 
     let mut frame = frame::Frame::new(100, 100);
 
-    let mut color = vec::Vec3 {
-        x: 1.,
-        y: 2.,
-        z: 3.,
+    let mut color = Color {
+        r: 1.,
+        g: 1.,
+        b: 1.,
     };
     frame.set_pixel(&color, 2, 2);
     println!("frame pixel count: {}", frame.pixel_count());
 
-    color.x = 2.;
+    color.r = 2.;
     // println!("{}", point);
 }
