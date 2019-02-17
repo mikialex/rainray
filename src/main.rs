@@ -1,13 +1,11 @@
+mod camera;
 mod frame;
 mod material;
-mod camera;
 use crate::camera::*;
 mod model;
 mod ray;
 mod sphere;
 mod vec;
-
-
 
 fn main() {
     let file_target_path = "/Users/mikialex/Desktop/rainray.png";

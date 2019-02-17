@@ -46,6 +46,6 @@ pub trait RayTrace {
 
 pub struct RayHitRecord {
     hit_point: Vec3,
-    hitNormal: Vec3,
+    hit_normal: Vec3,
     material: Material,
 }

@@ -1,7 +1,9 @@
 use crate::vec::Vec3;
 extern crate image;
 
-pub struct FramePixelData {}
+pub struct FramePixelData {
+    // rgba
+}
 
 pub struct Frame {
     width: u32,
