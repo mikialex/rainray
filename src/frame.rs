@@ -1,28 +1,26 @@
-use crate::vec::Vec3;
 extern crate image;
-
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color {
-    pub r:f32,
-    pub g:f32,
-    pub b:f32,
+    pub r: f32,
+    pub g: f32,
+    pub b: f32,
 }
 
 impl Color {
     pub fn new() -> Color {
         Color {
-            r:0.0,
-            g:0.0,
-            b:0.0
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
         }
     }
 }
 
 pub struct Frame {
-    width: u32,
-    height: u32,
-    data: Vec<Vec<Color>>,
+    pub width: u32,
+    pub height: u32,
+    pub data: Vec<Vec<Color>>,
 }
 
 impl Frame {
@@ -30,15 +28,8 @@ impl Frame {
         let mut frame = Frame {
             width,
             height,
-            data: vec![],
+            data: vec![vec![Color::new(); height as usize]; width as usize],
         };
-        for i in 0..width {
-            let mut row = vec![];
-            for j in 0..height{
-                row.push(Color::new())
-            }
-            frame.data.push(row);
-        }
         frame.clear();
         return frame;
     }
@@ -47,7 +38,7 @@ impl Frame {
         let data = &mut self.data;
         for i in 0..data.len() {
             let row = &mut data[i];
-            for j in 0..row.len(){
+            for j in 0..row.len() {
                 data[i][j] = Color::new()
             }
         }
@@ -55,7 +46,6 @@ impl Frame {
 
     pub fn set_pixel(&mut self, color: &Color, x: u32, y: u32) {
         let data = &mut self.data;
-        let index = (y as usize - 1) * self.width as usize + x as usize;
         data[x as usize][y as usize] = color.clone();
     }
 
@@ -68,14 +58,27 @@ impl Frame {
 
         // Iterate over the coordinates and pixels of the image
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
+            let pix = self.data[x as usize][y as usize];
             *pixel = image::Rgb([
-                128, 128, 128
-            // (self.r.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
-            // (self.g.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
-            // (self.b.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+            (pix.r.min(1.0).max(0.0) * 255.0) as u8,
+            (pix.g.min(1.0).max(0.0) * 255.0) as u8,
+            (pix.b.min(1.0).max(0.0) * 255.0) as u8,
         ])
         }
 
         imgbuf.save(path).unwrap();
     }
+
+    // pub fn iter_pixels(){
+
+    // }
 }
+
+// impl Iterator for MyFunkyIterator {
+//     type Item = (f64, Position);
+
+//     fn next(&mut self) -> Option<(f64, Position)> {
+//         // @target_san's example has the inner iterator at self.0
+//         // so maybe call self.0.next(), tweak the result, and return it.
+//     }
+// }

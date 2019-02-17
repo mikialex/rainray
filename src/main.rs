@@ -1,27 +1,31 @@
 mod camera;
 mod frame;
 mod material;
-use crate::camera::*;
-use crate::frame::*;
 mod model;
 mod ray;
 mod sphere;
 mod vec;
+mod renderer;
+mod scene;
+
+use crate::camera::*;
+use crate::renderer::*;
+use crate::sphere::*;
+use crate::scene::*;
 
 fn main() {
-    let file_target_path = "/Users/mikialex/Desktop/rainray.png";
-
+    let mut renderer = Renderer::new();
     let camera = Camera::new();
-
-    let sphere = model::Model {
-        geometry: sphere::Sphere {
+    let scene = Scene {
+        models: vec![model::Model {
+        geometry: Box::new(Sphere {
             center: vec::Vec3 {
                 x: 0.,
                 y: 0.,
                 z: 0.,
             },
             radius: 1.,
-        },
+        }),
         material: material::Material {
             color: vec::Vec3 {
                 x: 0.,
@@ -29,18 +33,13 @@ fn main() {
                 z: 0.,
             },
         },
+    }]
     };
 
-    let mut frame = frame::Frame::new(100, 100);
 
-    let mut color = Color {
-        r: 1.,
-        g: 1.,
-        b: 1.,
-    };
-    frame.set_pixel(&color, 2, 2);
-    println!("frame pixel count: {}", frame.pixel_count());
-
-    color.r = 2.;
-    // println!("{}", point);
+    println!("start render");
+    renderer.render(&camera, &scene);
+    let file_target_path = "/Users/mikialex/Desktop/rainray.png";
+    println!("writing file to path: {}", file_target_path);
+    renderer.frame.write_to_file(file_target_path);
 }

@@ -1,8 +1,7 @@
 use crate::material::Material;
 use crate::ray::*;
-use crate::sphere::Sphere;
 
-pub struct Model<T: Intersecterable> {
-    pub geometry: T,
+pub struct Model {
+    pub geometry: Box<Intersecterable>,
     pub material: Material,
 }
