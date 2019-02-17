@@ -43,5 +43,19 @@ impl Frame {
         self.width * self.height
     }
 
-    pub fn write_to_file(&self, path: &str) {}
+    pub fn write_to_file(&self, path: &str) {
+        let mut imgbuf = image::ImageBuffer::new(self.width, self.height);
+
+        // Iterate over the coordinates and pixels of the image
+        for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
+            *pixel = image::Rgb([
+                128, 128, 128
+            // (self.r.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+            // (self.g.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+            // (self.b.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+        ])
+        }
+
+        imgbuf.save(path).unwrap();
+    }
 }
