@@ -13,6 +13,8 @@ use crate::renderer::*;
 use crate::sphere::*;
 use crate::scene::*;
 
+use std::env;
+
 fn main() {
     let mut renderer = Renderer::new();
     let camera = Camera::new();
@@ -36,8 +38,7 @@ fn main() {
     }]
     };
 
-
-    println!("start render");
+    println!("working dir {}", env::current_exe().unwrap().display());
     renderer.render(&camera, &scene);
     let file_target_path = "/Users/mikialex/Desktop/rainray.png";
     println!("writing file to path: {}", file_target_path);

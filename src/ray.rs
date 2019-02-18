@@ -10,6 +10,7 @@ impl Ray {
         self.origin + self.direction * distance
     }
 
+    #[allow(dead_code)]
     pub fn new() -> Ray {
         Ray {
             origin: Vec3 {

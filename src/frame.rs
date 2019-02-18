@@ -42,6 +42,7 @@ impl Frame {
         }
     }
 
+    #[allow(dead_code)]
     pub fn set_pixel(&mut self, color: &Color, x: u32, y: u32) {
         let data = &mut self.data;
         data[x as usize][y as usize] = color.clone();
