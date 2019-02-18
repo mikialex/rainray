@@ -14,12 +14,15 @@ impl Renderer {
   }
 
   pub fn render(&mut self, camera: &Camera, scene: &Scene) -> () {
-    // let mut frame_data = &self.frame.data;
-    // for row in frame_data {
-    //   for pixel in row {
-    //     pixel.r = 1.0;
-    //   }
-    // }
+    let frame_data = &mut self.frame.data;
+    for (i, row) in frame_data.iter_mut().enumerate() {
+      for (j, pixel) in row.iter_mut().enumerate() {
+        let x_ratio = i as f32 / self.frame.width as f32;
+        let y_ratio = j as f32 / self.frame.height as f32;
+        let ray = camera.generate_pixel_ray(x_ratio, y_ratio);
+        pixel.r = 0.5;
+      }
+    }
 
   }
 }

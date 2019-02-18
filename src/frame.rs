@@ -8,12 +8,8 @@ pub struct Color {
 }
 
 impl Color {
-    pub fn new() -> Color {
-        Color {
-            r: 0.0,
-            g: 0.0,
-            b: 0.0,
-        }
+    pub fn new(r: f32, g: f32, b: f32) -> Color {
+        Color {r,g,b}
     }
 }
 
@@ -28,18 +24,20 @@ impl Frame {
         let mut frame = Frame {
             width,
             height,
-            data: vec![vec![Color::new(); height as usize]; width as usize],
+            data: vec![vec![Color::new(0.0, 0.0, 0.0); height as usize]; width as usize],
         };
-        frame.clear();
+        frame.clear(&Color::new(0.0, 0.0, 0.0));
         return frame;
     }
 
-    pub fn clear(&mut self) {
+    pub fn clear(&mut self, color:&Color) {
         let data = &mut self.data;
         for i in 0..data.len() {
             let row = &mut data[i];
             for j in 0..row.len() {
-                data[i][j] = Color::new()
+                data[i][j].r = color.r;
+                data[i][j].g = color.g;
+                data[i][j].b = color.b;
             }
         }
     }
@@ -67,6 +65,7 @@ impl Frame {
         }
 
         imgbuf.save(path).unwrap();
+        println!("{} pixels has write to {}", self.pixel_count(), path);
     }
 
     // pub fn iter_pixels(){
