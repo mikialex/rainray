@@ -38,9 +38,12 @@ fn main() {
     }]
     };
 
-    println!("working dir {}", env::current_exe().unwrap().display());
+    let mut current_path = env::current_dir().unwrap();
+    println!("working dir {}", current_path.display());
     renderer.render(&camera, &scene);
-    let file_target_path = "/Users/mikialex/Desktop/rainray.png";
+    current_path.push("result.png");
+    let file_target_path = current_path.into_os_string()
+    .into_string().unwrap();
     println!("writing file to path: {}", file_target_path);
-    renderer.frame.write_to_file(file_target_path);
+    renderer.frame.write_to_file(&file_target_path);
 }
