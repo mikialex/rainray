@@ -12,6 +12,7 @@ use crate::camera::*;
 use crate::renderer::*;
 use crate::sphere::*;
 use crate::scene::*;
+use crate::frame::*;
 
 use std::env;
 
@@ -24,16 +25,12 @@ fn main() {
             center: vec::Vec3 {
                 x: 0.,
                 y: 0.,
-                z: 0.,
+                z:-10.,
             },
             radius: 1.,
         }),
         material: material::Material {
-            color: vec::Vec3 {
-                x: 0.,
-                y: 0.,
-                z: 0.,
-            },
+            diffuse_color: Color::new(0.5,0.5,0.5),
         },
     }]
     };

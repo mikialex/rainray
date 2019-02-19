@@ -1,5 +1,6 @@
-use crate::vec::Vec3;
+use crate::frame::*;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Material {
-    pub color: Vec3,
+    pub diffuse_color: Color,
 }
