@@ -11,12 +11,12 @@ pub struct Renderer {
     pub frame: Frame,
 }
 
-pub static max_ray_hit_distance: f32 = 1000.0;
+pub static MAX_RAY_HIT_DISTANCE: f32 = 1000.0;
 
 impl Renderer {
     pub fn new() -> Renderer {
         Renderer {
-          frame: Frame::new(100, 100),
+          frame: Frame::new(500, 500),
         }
     }
 

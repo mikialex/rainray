@@ -30,13 +30,12 @@ impl Vec3 {
         self.norm().sqrt()
     }
 
-    pub fn normalize(&self) -> Vec3 {
+    pub fn normalize(&mut self) -> &Self {
         let inv_len = self.length().recip();
-        Vec3 {
-            x: self.x * inv_len,
-            y: self.y * inv_len,
-            z: self.z * inv_len,
-        }
+        self.x = self.x * inv_len;
+        self.y = self.y * inv_len;
+        self.z = self.z * inv_len;
+        return self
     }
 }
 

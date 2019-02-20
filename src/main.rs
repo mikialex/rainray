@@ -13,10 +13,12 @@ use crate::renderer::*;
 use crate::sphere::*;
 use crate::scene::*;
 use crate::frame::*;
+use crate::vec::*;
 
 use std::env;
 
 fn main() {
+
     let mut renderer = Renderer::new();
     let camera = Camera::new();
     let scene = Scene {
@@ -25,9 +27,9 @@ fn main() {
             center: vec::Vec3 {
                 x: 0.,
                 y: 0.,
-                z:-10.,
+                z: -5.,
             },
-            radius: 1.,
+            radius: 2.,
         }),
         material: material::Material {
             diffuse_color: Color::new(0.5,0.5,0.5),
