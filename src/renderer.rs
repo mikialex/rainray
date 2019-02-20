@@ -20,7 +20,7 @@ impl Renderer {
         renderer
     }
 
-    pub fn path_trace(ray: &Ray, scene: &Scene) -> Color {
+    pub fn path_trace(ray: &Ray, scene: &Scene, camera: &Camera) -> Color {
         let mut min_distance = std::f64::INFINITY;
         let mut material: Option<Material> = None;
         let mut min_distance_intersection: Option<Intersection> = None;
@@ -38,7 +38,7 @@ impl Renderer {
         if material.is_none() {
             Color::new(0.7,0.7,0.7)
         } else {
-            material.unwrap().diffuse_color.clone()
+            material.unwrap().shade(camera, &min_distance_intersection.unwrap(), &scene.lights)
         }
     }
 
@@ -58,7 +58,7 @@ impl Renderer {
                 pixel.g = rng.gen();
                 pixel.b = rng.gen();
 
-                let color = Renderer::path_trace(&ray, scene);
+                let color = Renderer::path_trace(&ray, scene, camera);
                 pixel.r = color.r;
                 pixel.g = color.g;
                 pixel.b = color.b;

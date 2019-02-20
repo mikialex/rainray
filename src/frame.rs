@@ -13,6 +13,18 @@ impl Color {
     }
 }
 
+impl std::ops::Mul<f64> for Color {
+    fn mul(self, scalar: f64) -> Color {
+        Color {
+            r: self.r * scalar,
+            g: self.g * scalar,
+            b: self.b * scalar,
+        }
+    }
+
+    type Output = Color;
+}
+
 pub struct Frame {
     pub width: u32,
     pub height: u32,

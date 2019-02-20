@@ -37,14 +37,15 @@ fn main() {
             diffuse_color: Color::new(0.8,0.8,0.8),
         },
     }],
-    lights: vec![Box::new(PointLight {
+    lights: vec![
+        PointLight {
             position: Vec3 {
-                x: 0.,
+                x: -200.,
                 y: 0.,
-                z: -5.,
+                z: 200.,
             },
-            color: Color::new(0.8,0.8,0.8),
-        })
+            color: Vec3::new(0.8,0.8,0.8),
+        }
     ],
     };
 
