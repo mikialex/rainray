@@ -1,16 +1,16 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
 }
 
 impl Vec3 {
-    pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
+    pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
         Vec3 { x, y, z }
     }
 
-    pub fn dot(vec_a: &Vec3, vec_b: &Vec3) -> f32 {
+    pub fn dot(vec_a: &Vec3, vec_b: &Vec3) -> f64 {
         vec_a.x * vec_b.x + vec_a.y * vec_b.y + vec_a.z * vec_b.z
     }
 
@@ -22,11 +22,11 @@ impl Vec3 {
         }
     }
 
-    pub fn norm(&self) -> f32 {
+    pub fn norm(&self) -> f64 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    pub fn length(&self) -> f32 {
+    pub fn length(&self) -> f64 {
         self.norm().sqrt()
     }
 
@@ -62,8 +62,8 @@ impl std::ops::Sub for Vec3 {
     type Output = Vec3;
 }
 
-impl std::ops::Mul<f32> for Vec3 {
-    fn mul(self, scalar: f32) -> Vec3 {
+impl std::ops::Mul<f64> for Vec3 {
+    fn mul(self, scalar: f64) -> Vec3 {
         Vec3 {
             x: self.x * scalar,
             y: self.y * scalar,
@@ -74,8 +74,8 @@ impl std::ops::Mul<f32> for Vec3 {
     type Output = Vec3;
 }
 
-impl std::ops::Div<f32> for Vec3 {
-    fn div(self, scalar: f32) -> Vec3 {
+impl std::ops::Div<f64> for Vec3 {
+    fn div(self, scalar: f64) -> Vec3 {
         Vec3 {
             x: self.x / scalar,
             y: self.y / scalar,

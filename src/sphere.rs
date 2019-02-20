@@ -4,7 +4,7 @@ use crate::vec::Vec3;
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
     pub center: Vec3,
-    pub radius: f32,
+    pub radius: f64,
 }
 
 impl Intersecterable for Sphere {
@@ -26,6 +26,9 @@ impl Intersecterable for Sphere {
             };
 
             if distance > 0.0 {
+                if distance > MAX_RAY_HIT_DISTANCE {
+                    return None // too far
+                }
                 let hit_position = ray.point_at_direction(distance);
                 let hit_normal = *(hit_position - self.center).normalize();
                 Some(Intersection {

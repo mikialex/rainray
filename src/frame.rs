@@ -2,13 +2,13 @@ extern crate image;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color {
-    pub r: f32,
-    pub g: f32,
-    pub b: f32,
+    pub r: f64,
+    pub g: f64,
+    pub b: f64,
 }
 
 impl Color {
-    pub fn new(r: f32, g: f32, b: f32) -> Color {
+    pub fn new(r: f64, g: f64, b: f64) -> Color {
         Color {r,g,b}
     }
 }
@@ -21,12 +21,11 @@ pub struct Frame {
 
 impl Frame {
     pub fn new(width: u32, height: u32) -> Frame {
-        let mut frame = Frame {
+        let frame = Frame {
             width,
             height,
             data: vec![vec![Color::new(0.0, 0.0, 0.0); height as usize]; width as usize],
         };
-        frame.clear(&Color::new(0.0, 0.0, 0.0));
         return frame;
     }
 

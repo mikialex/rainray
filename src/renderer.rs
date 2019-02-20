@@ -11,17 +11,17 @@ pub struct Renderer {
     pub frame: Frame,
 }
 
-pub static MAX_RAY_HIT_DISTANCE: f32 = 1000.0;
-
 impl Renderer {
     pub fn new() -> Renderer {
-        Renderer {
+        let mut renderer = Renderer {
           frame: Frame::new(500, 500),
-        }
+        };
+        renderer.frame.clear(&Color::new(0.0, 0.0, 0.0));
+        renderer
     }
 
     pub fn path_trace(ray: &Ray, scene: &Scene) -> Color {
-        let mut min_distance = std::f32::INFINITY;
+        let mut min_distance = std::f64::INFINITY;
         let mut material: Option<Material> = None;
         let mut min_distance_intersection: Option<Intersection> = None;
 
@@ -36,7 +36,7 @@ impl Renderer {
             }
         }
         if material.is_none() {
-            Color::new(0.0,0.0,0.0)
+            Color::new(0.7,0.7,0.7)
         } else {
             material.unwrap().diffuse_color.clone()
         }
@@ -51,8 +51,8 @@ impl Renderer {
       let frame_data = &mut self.frame.data;
       for (i, row) in frame_data.iter_mut().enumerate() {
           for (j, pixel) in row.iter_mut().enumerate() {
-                let x_ratio = i as f32 / self.frame.width as f32;
-                let y_ratio = j as f32 / self.frame.height as f32;
+                let x_ratio = i as f64 / self.frame.width as f64;
+                let y_ratio = j as f64 / self.frame.height as f64;
                 let ray = camera.generate_pixel_ray(x_ratio, y_ratio);
                 pixel.r = rng.gen();
                 pixel.g = rng.gen();

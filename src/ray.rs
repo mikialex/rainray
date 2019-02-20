@@ -6,7 +6,7 @@ pub struct Ray {
 }
 
 impl Ray {
-    pub fn point_at_direction(&self, distance: f32) -> Vec3 {
+    pub fn point_at_direction(&self, distance: f64) -> Vec3 {
         self.origin + self.direction * distance
     }
 
@@ -34,12 +34,15 @@ impl Ray {
     }
 }
 
+
+pub static MAX_RAY_HIT_DISTANCE: f64 = 1000.0;
+
 pub trait Intersecterable {
     fn intersect(&self, ray: &Ray) -> Option<Intersection>;
 }
 
 pub struct Intersection {
-    pub distance: f32,
+    pub distance: f64,
     pub hit_position: Vec3,
     pub hit_normal: Vec3,
 }
