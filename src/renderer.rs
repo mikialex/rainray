@@ -3,6 +3,7 @@ use crate::frame::*;
 use crate::material::*;
 use crate::ray::*;
 use crate::scene::*;
+use crate::vec::*;
 
 use rand::prelude::*;
 use std::time::Instant;
@@ -11,6 +12,8 @@ pub struct Renderer {
     pub frame: Frame,
     pub render_frame: Frame,
     super_sample_rate: u32,
+    exposure_upper_bound: f64,
+    gamma: f64
 }
 
 impl Renderer {
@@ -25,13 +28,15 @@ impl Renderer {
                 height * super_sample_rate,
             ),
             frame: Frame::new(width, height),
-            super_sample_rate
+            super_sample_rate,
+            exposure_upper_bound: 1.0,
+            gamma: 2.2
         };
         renderer.frame.clear(&Color::new(0.0, 0.0, 0.0));
         renderer
     }
 
-    pub fn path_trace(ray: &Ray, scene: &Scene, camera: &Camera) -> Color {
+    pub fn path_trace(ray: &Ray, scene: &Scene, camera: &Camera) -> Vec3 {
         let mut min_distance = std::f64::INFINITY;
         let mut material: Option<Material> = None;
         let mut min_distance_intersection: Option<Intersection> = None;
@@ -47,7 +52,7 @@ impl Renderer {
             }
         }
         if material.is_none() {
-            Color::new(0.7, 0.7, 0.7)
+            Vec3::new(0., 0., 0.)
         } else {
             material
                 .unwrap()
@@ -73,10 +78,10 @@ impl Renderer {
                 // pixel.g = rng.gen();
                 // pixel.b = rng.gen();
 
-                let color = Renderer::path_trace(&ray, scene, camera);
-                pixel.r = color.r;
-                pixel.g = color.g;
-                pixel.b = color.b;
+                let energy = Renderer::path_trace(&ray, scene, camera);
+                pixel.r = energy.x / self.exposure_upper_bound;
+                pixel.g = energy.y / self.exposure_upper_bound;
+                pixel.b = energy.z / self.exposure_upper_bound;
             }
         }
 
