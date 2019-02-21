@@ -55,6 +55,7 @@ fn main() {
     current_path.push("result.png");
     let file_target_path = current_path.into_os_string()
     .into_string().unwrap();
+    
     println!("writing file to path: {}", file_target_path);
     renderer.frame.write_to_file(&file_target_path);
 }

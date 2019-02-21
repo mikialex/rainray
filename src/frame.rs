@@ -78,6 +78,7 @@ impl Frame {
 
         imgbuf.save(path).unwrap();
         println!("{} pixels has write to {}", self.pixel_count(), path);
+        
     }
 
     // pub fn iter_pixels(){

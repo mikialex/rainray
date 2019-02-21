@@ -22,7 +22,7 @@ impl Material {
             center_direction.normalize();
 
             // diffuse
-            light_e = light_e + light.color * Vec3::dot(&intersection.hit_normal, &light_direction).max(0.0);
+            light_e += light.color * Vec3::dot(&intersection.hit_normal, &light_direction).max(0.0);
         }
         Color::new(
             self.diffuse_color.r * light_e.x,
