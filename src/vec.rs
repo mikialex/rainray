@@ -35,7 +35,7 @@ impl Vec3 {
         self.x = self.x * inv_len;
         self.y = self.y * inv_len;
         self.z = self.z * inv_len;
-        return self
+        return self;
     }
 }
 

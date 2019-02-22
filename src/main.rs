@@ -1,61 +1,57 @@
 mod camera;
 mod frame;
+mod light;
 mod material;
 mod model;
 mod ray;
-mod sphere;
-mod vec;
 mod renderer;
 mod scene;
-mod light;
+mod sphere;
+mod vec;
 
 use crate::camera::*;
-use crate::renderer::*;
-use crate::sphere::*;
-use crate::scene::*;
 use crate::frame::*;
-use crate::vec::*;
 use crate::light::*;
+use crate::renderer::*;
+use crate::scene::*;
+use crate::sphere::*;
+use crate::vec::*;
 
 use std::env;
 
 fn main() {
-
     let mut renderer = Renderer::new();
     let camera = Camera::new();
     let scene = Scene {
         models: vec![model::Model {
-        geometry: Box::new(Sphere {
-            center: Vec3 {
-                x: 0.,
-                y: 0.,
-                z: -5.,
+            geometry: Box::new(Sphere {
+                center: Vec3 {
+                    x: 0.,
+                    y: 0.,
+                    z: -5.,
+                },
+                radius: 2.,
+            }),
+            material: material::Material {
+                diffuse_color: Color::new(0.8, 0.8, 0.8),
             },
-            radius: 2.,
-        }),
-        material: material::Material {
-            diffuse_color: Color::new(0.8,0.8,0.8),
-        },
-    }],
-    lights: vec![
-        PointLight {
+        }],
+        lights: vec![PointLight {
             position: Vec3 {
                 x: -200.,
                 y: 0.,
                 z: 200.,
             },
-            color: Vec3::new(1.0,1.0,1.0),
-        }
-    ],
+            color: Vec3::new(1.0, 1.0, 1.0),
+        }],
     };
 
     let mut current_path = env::current_dir().unwrap();
     println!("working dir {}", current_path.display());
     renderer.render(&camera, &scene);
     current_path.push("result.png");
-    let file_target_path = current_path.into_os_string()
-    .into_string().unwrap();
-    
+    let file_target_path = current_path.into_os_string().into_string().unwrap();
+
     println!("writing file to path: {}", file_target_path);
     renderer.frame.write_to_file(&file_target_path);
 }

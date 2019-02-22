@@ -34,7 +34,6 @@ impl Ray {
     }
 }
 
-
 pub static MAX_RAY_HIT_DISTANCE: f64 = 1000.0;
 
 pub trait Intersecterable {

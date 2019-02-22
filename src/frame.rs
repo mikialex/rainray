@@ -9,14 +9,14 @@ pub struct Color {
 
 impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Color {
-        Color {r,g,b}
+        Color { r, g, b }
     }
 
     pub fn gamma_rgb(&self, gamma_correction: f64) -> Color {
         Color::new(
             self.r.min(1.0).max(0.0).powf(gamma_correction),
             self.g.min(1.0).max(0.0).powf(gamma_correction),
-            self.b.min(1.0).max(0.0).powf(gamma_correction)
+            self.b.min(1.0).max(0.0).powf(gamma_correction),
         )
     }
 }
@@ -49,7 +49,7 @@ impl Frame {
         return frame;
     }
 
-    pub fn clear(&mut self, color:&Color) {
+    pub fn clear(&mut self, color: &Color) {
         let data = &mut self.data;
         for i in 0..data.len() {
             let row = &mut data[i];
@@ -78,15 +78,14 @@ impl Frame {
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
             let pix = self.data[x as usize][y as usize];
             *pixel = image::Rgb([
-            (pix.r.min(1.0).max(0.0) * 255.0) as u8,
-            (pix.g.min(1.0).max(0.0) * 255.0) as u8,
-            (pix.b.min(1.0).max(0.0) * 255.0) as u8,
-        ])
+                (pix.r.min(1.0).max(0.0) * 255.0) as u8,
+                (pix.g.min(1.0).max(0.0) * 255.0) as u8,
+                (pix.b.min(1.0).max(0.0) * 255.0) as u8,
+            ])
         }
 
         imgbuf.save(path).unwrap();
         println!("{} pixels has write to {}", self.pixel_count(), path);
-        
     }
 
     // pub fn iter_pixels(){

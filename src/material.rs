@@ -1,18 +1,22 @@
-
+use crate::camera::*;
 use crate::frame::*;
 use crate::light::*;
-use crate::vec::*;
 use crate::ray::*;
-use crate::camera::*;
+use crate::vec::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Material {
-    pub diffuse_color: Color
+    pub diffuse_color: Color,
 }
 
 impl Material {
-    pub fn shade(&self, camera: &Camera, intersection: &Intersection, light_list: &Vec<PointLight>) -> Vec3 {
-        let mut light_e = Vec3::new(0.0,0.0,0.0);
+    pub fn shade(
+        &self,
+        camera: &Camera,
+        intersection: &Intersection,
+        light_list: &Vec<PointLight>,
+    ) -> Vec3 {
+        let mut light_e = Vec3::new(0.0, 0.0, 0.0);
         for light in light_list {
             let mut light_direction = light.position - intersection.hit_position;
             let mut hit_to_eye_direction = camera.eye_position - intersection.hit_position;

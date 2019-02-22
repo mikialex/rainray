@@ -29,13 +29,13 @@ impl Camera {
         let y_axis = *Vec3::cross(&x_axis, &center_direction).normalize();
         let mut film_position = self.film_center + x_axis * self.film_width * clamped_x_ratio;
         film_position = film_position + y_axis * self.film_height * clamped_y_ratio;
-        return film_position
+        return film_position;
     }
 
     pub fn generate_pixel_ray(&self, x_ratio: f64, y_ratio: f64) -> Ray {
         let mut ray = Ray::from_point_to_point(
-            self.eye_position, 
-            self.get_pixel_world_position(x_ratio, y_ratio)
+            self.eye_position,
+            self.get_pixel_world_position(x_ratio, y_ratio),
         );
         ray.direction.normalize();
         ray

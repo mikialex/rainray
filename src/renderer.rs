@@ -14,7 +14,7 @@ pub struct Renderer {
     pub render_frame: Frame,
     super_sample_rate: u64,
     exposure_upper_bound: f64,
-    gamma: f64
+    gamma: f64,
 }
 
 impl Renderer {
@@ -24,14 +24,11 @@ impl Renderer {
         let super_sample_rate = 4;
 
         let mut renderer = Renderer {
-            render_frame: Frame::new(
-                width * super_sample_rate,
-                height * super_sample_rate,
-            ),
+            render_frame: Frame::new(width * super_sample_rate, height * super_sample_rate),
             frame: Frame::new(width, height),
             super_sample_rate,
             exposure_upper_bound: 1.0,
-            gamma: 2.2
+            gamma: 2.2,
         };
         renderer.frame.clear(&Color::new(0.0, 0.0, 0.0));
         renderer
@@ -100,13 +97,15 @@ impl Renderer {
         let super_sample_rate = self.super_sample_rate as usize;
         for (i, row) in result_data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
-                let super_sample_count = self.super_sample_rate as f64 * self.super_sample_rate as f64;
+                let super_sample_count =
+                    self.super_sample_rate as f64 * self.super_sample_rate as f64;
                 let mut r_all = 0.0;
                 let mut g_all = 0.0;
                 let mut b_all = 0.0;
-                for k in 0..super_sample_rate{
+                for k in 0..super_sample_rate {
                     for l in 0..super_sample_rate {
-                        let sample_pix = frame_data[i * super_sample_rate + k][j * super_sample_rate + l];
+                        let sample_pix =
+                            frame_data[i * super_sample_rate + k][j * super_sample_rate + l];
                         let gammared_pix = sample_pix.gamma_rgb(self.gamma);
                         r_all += gammared_pix.r;
                         g_all += gammared_pix.g;
