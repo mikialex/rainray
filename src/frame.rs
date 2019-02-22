@@ -11,6 +11,14 @@ impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Color {
         Color {r,g,b}
     }
+
+    pub fn gamma_rgb(&self, gamma_correction: f64) -> Color {
+        Color::new(
+            self.r.min(1.0).max(0.0).powf(gamma_correction),
+            self.g.min(1.0).max(0.0).powf(gamma_correction),
+            self.b.min(1.0).max(0.0).powf(gamma_correction)
+        )
+    }
 }
 
 impl std::ops::Mul<f64> for Color {
@@ -26,13 +34,13 @@ impl std::ops::Mul<f64> for Color {
 }
 
 pub struct Frame {
-    pub width: u32,
-    pub height: u32,
+    pub width: u64,
+    pub height: u64,
     pub data: Vec<Vec<Color>>,
 }
 
 impl Frame {
-    pub fn new(width: u32, height: u32) -> Frame {
+    pub fn new(width: u64, height: u64) -> Frame {
         let frame = Frame {
             width,
             height,
@@ -54,17 +62,17 @@ impl Frame {
     }
 
     #[allow(dead_code)]
-    pub fn set_pixel(&mut self, color: &Color, x: u32, y: u32) {
+    pub fn set_pixel(&mut self, color: &Color, x: u64, y: u64) {
         let data = &mut self.data;
         data[x as usize][y as usize] = color.clone();
     }
 
-    pub fn pixel_count(&self) -> u32 {
+    pub fn pixel_count(&self) -> u64 {
         self.width * self.height
     }
 
     pub fn write_to_file(&self, path: &str) {
-        let mut imgbuf = image::ImageBuffer::new(self.width, self.height);
+        let mut imgbuf = image::ImageBuffer::new(self.width as u32, self.height as u32);
 
         // Iterate over the coordinates and pixels of the image
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {

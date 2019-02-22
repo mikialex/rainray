@@ -5,13 +5,14 @@ use crate::ray::*;
 use crate::scene::*;
 use crate::vec::*;
 
+use indicatif::ProgressBar;
 use rand::prelude::*;
 use std::time::Instant;
 
 pub struct Renderer {
     pub frame: Frame,
     pub render_frame: Frame,
-    super_sample_rate: u32,
+    super_sample_rate: u64,
     exposure_upper_bound: f64,
     gamma: f64
 }
@@ -69,6 +70,9 @@ impl Renderer {
         let x_ratio_unit = 1.0 / self.render_frame.width as f64;
         let y_ratio_unit = 1.0 / self.render_frame.width as f64;
 
+        let bar = ProgressBar::new(100);
+        let bar_inv = (self.render_frame.width as f64 / 100.).ceil() as usize;
+
         for (i, row) in frame_data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
                 let x_ratio = i as f64 * x_ratio_unit;
@@ -83,9 +87,14 @@ impl Renderer {
                 pixel.g = energy.y / self.exposure_upper_bound;
                 pixel.b = energy.z / self.exposure_upper_bound;
             }
+            if i % bar_inv == 0 {
+                bar.inc(1);
+            }
         }
+        bar.finish_and_clear();
+        println!("frame data render finished.");
 
-        println!("frame data render finished. start super sample down sample");
+        println!("start super sample down sample and gamma corration");
 
         let result_data = &mut self.frame.data;
         let super_sample_rate = self.super_sample_rate as usize;
@@ -98,9 +107,10 @@ impl Renderer {
                 for k in 0..super_sample_rate{
                     for l in 0..super_sample_rate {
                         let sample_pix = frame_data[i * super_sample_rate + k][j * super_sample_rate + l];
-                        r_all += sample_pix.r;
-                        g_all += sample_pix.g;
-                        b_all += sample_pix.b;
+                        let gammared_pix = sample_pix.gamma_rgb(self.gamma);
+                        r_all += gammared_pix.r;
+                        g_all += gammared_pix.g;
+                        b_all += gammared_pix.b;
                     }
                 }
                 pixel.r = r_all / super_sample_count;

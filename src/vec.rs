@@ -54,8 +54,8 @@ impl std::ops::Add for Vec3 {
 impl std::ops::AddAssign for Vec3 {
     fn add_assign(&mut self, other: Vec3) -> () {
         self.x = self.x + other.x;
-        self.y = self.y + other.x;
-        self.z = self.z + other.x;
+        self.y = self.y + other.y;
+        self.z = self.z + other.z;
     }
 }
 
