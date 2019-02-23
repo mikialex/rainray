@@ -6,15 +6,17 @@ mod model;
 mod ray;
 mod renderer;
 mod scene;
-mod sphere;
+mod geometry;
 mod vec;
+mod environment;
 
+use crate::environment::*;
 use crate::camera::*;
 use crate::frame::*;
 use crate::light::*;
 use crate::renderer::*;
 use crate::scene::*;
-use crate::sphere::*;
+use crate::geometry::*;
 use crate::vec::*;
 
 use std::env;
@@ -44,6 +46,9 @@ fn main() {
             },
             color: Vec3::new(1.0, 1.0, 1.0),
         }],
+        env: Box::new(SolidEnvironment{
+            color: Color::new(0.8, 0.8, 0.8),
+        })
     };
 
     let mut current_path = env::current_dir().unwrap();

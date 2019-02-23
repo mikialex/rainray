@@ -11,19 +11,8 @@ impl Ray {
     }
 
     #[allow(dead_code)]
-    pub fn new() -> Ray {
-        Ray {
-            origin: Vec3 {
-                x: 0.,
-                y: 0.,
-                z: 0.,
-            },
-            direction: Vec3 {
-                x: 0.,
-                y: 0.,
-                z: 1.,
-            },
-        }
+    pub fn new(origin: Vec3, direction: Vec3) -> Ray {
+        Ray { origin, direction }
     }
 
     pub fn from_point_to_point(origin: Vec3, target: Vec3) -> Ray {

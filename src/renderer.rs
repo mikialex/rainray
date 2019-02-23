@@ -15,6 +15,10 @@ pub struct Renderer {
     super_sample_rate: u64,
     exposure_upper_bound: f64,
     gamma: f64,
+
+    trace_fix_sample_count:u64,
+    bounce_time_limit: u64,
+
 }
 
 impl Renderer {
@@ -29,12 +33,14 @@ impl Renderer {
             super_sample_rate,
             exposure_upper_bound: 1.0,
             gamma: 2.2,
+            bounce_time_limit: 1,
+            trace_fix_sample_count: 3,
         };
         renderer.frame.clear(&Color::new(0.0, 0.0, 0.0));
         renderer
     }
 
-    pub fn path_trace(ray: &Ray, scene: &Scene, camera: &Camera) -> Vec3 {
+    pub fn path_trace(ray: &Ray, scene: &Scene, camera: &Camera) -> Option<Vec3> {
         let mut min_distance = std::f64::INFINITY;
         let mut material: Option<Material> = None;
         let mut min_distance_intersection: Option<Intersection> = None;
@@ -50,11 +56,11 @@ impl Renderer {
             }
         }
         if material.is_none() {
-            Vec3::new(0., 0., 0.)
+            None
         } else {
-            material
+            Some(material
                 .unwrap()
-                .shade(camera, &min_distance_intersection.unwrap(), &scene.lights)
+                .shade(camera, &min_distance_intersection.unwrap(), &scene.lights))
         }
     }
 
@@ -72,6 +78,9 @@ impl Renderer {
 
         for (i, row) in frame_data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
+                for sample in 0..self.trace_fix_sample_count {
+                    
+                }
                 let x_ratio = i as f64 * x_ratio_unit;
                 let y_ratio = j as f64 * y_ratio_unit;
                 let ray = camera.generate_pixel_ray(x_ratio, y_ratio);
@@ -79,10 +88,16 @@ impl Renderer {
                 // pixel.g = rng.gen();
                 // pixel.b = rng.gen();
 
-                let energy = Renderer::path_trace(&ray, scene, camera);
-                pixel.r = energy.x / self.exposure_upper_bound;
-                pixel.g = energy.y / self.exposure_upper_bound;
-                pixel.b = energy.z / self.exposure_upper_bound;
+                if let Some(energy) = Renderer::path_trace(&ray, scene, camera) {
+                    pixel.r = energy.x / self.exposure_upper_bound;
+                    pixel.g = energy.y / self.exposure_upper_bound;
+                    pixel.b = energy.z / self.exposure_upper_bound;
+                } else {
+                    pixel.r =0.0;
+                    pixel.g =0.0;
+                    pixel.b =0.0;
+
+                }
             }
             if i % bar_inv == 0 {
                 bar.inc(1);
