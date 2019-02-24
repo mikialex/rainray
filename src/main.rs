@@ -38,7 +38,7 @@ fn main() {
                 diffuse_color: Color::new(0.8, 0.8, 0.8),
             },
         }],
-        lights: vec![PointLight {
+        point_lights: vec![PointLight {
             position: Vec3 {
                 x: -200.,
                 y: 0.,
