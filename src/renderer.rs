@@ -10,8 +10,6 @@ use rand::prelude::*;
 use std::time::Instant;
 
 pub struct Renderer {
-    pub frame: Frame,
-    pub render_frame: Frame,
     super_sample_rate: u64,
     exposure_upper_bound: f64,
     gamma: f64,
@@ -36,15 +34,12 @@ impl Renderer {
         let super_sample_rate = 4;
 
         let mut renderer = Renderer {
-            render_frame: Frame::new(width * super_sample_rate, height * super_sample_rate),
-            frame: Frame::new(width, height),
             super_sample_rate,
             exposure_upper_bound: 1.0,
             gamma: 2.2,
             bounce_time_limit: 1,
             trace_fix_sample_count: 3,
         };
-        renderer.frame.clear(&Color::new(0.0, 0.0, 0.0));
         renderer
     }
 
@@ -90,19 +85,22 @@ impl Renderer {
         energy_acc / diff_absorb
     }
 
-    pub fn render(&mut self, camera: &Camera, scene: &Scene) -> () {
+    pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) -> () {
         println!("start render");
         let now = Instant::now();
         let mut rng = rand::thread_rng();
+        let mut render_frame = Frame::new(
+            frame.width * self.super_sample_rate,
+            frame.height * self.super_sample_rate);
 
-        let x_ratio_unit = 1.0 / self.render_frame.width as f64;
-        let y_ratio_unit = 1.0 / self.render_frame.width as f64;
+        let x_ratio_unit = 1.0 / render_frame.width as f64;
+        let y_ratio_unit = 1.0 / render_frame.width as f64;
         let energy_div = self.trace_fix_sample_count as f64 * self.exposure_upper_bound;
 
         let bar = ProgressBar::new(100);
-        let bar_inv = (self.render_frame.width as f64 / 100.).ceil() as usize;
+        let bar_inv = (render_frame.width as f64 / 100.).ceil() as usize;
 
-        for (i, row) in self.render_frame.data.iter_mut().enumerate() {
+        for (i, row) in render_frame.data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
 
                 let x_ratio = i as f64 * x_ratio_unit;
@@ -128,7 +126,7 @@ impl Renderer {
 
         println!("start super sample down sample and gamma corration");
 
-        let result_data = &mut self.frame.data;
+        let result_data = &mut frame.data;
         let super_sample_rate = self.super_sample_rate as usize;
         for (i, row) in result_data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
@@ -140,7 +138,7 @@ impl Renderer {
                 for k in 0..super_sample_rate {
                     for l in 0..super_sample_rate {
                         let sample_pix =
-                            self.render_frame.data[i * super_sample_rate + k][j * super_sample_rate + l];
+                            render_frame.data[i * super_sample_rate + k][j * super_sample_rate + l];
                         let gammared_pix = sample_pix.gamma_rgb(self.gamma);
                         r_all += gammared_pix.r;
                         g_all += gammared_pix.g;

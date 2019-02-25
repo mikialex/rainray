@@ -22,8 +22,9 @@ use crate::vec::*;
 use std::env;
 
 fn main() {
-    let mut renderer = Renderer::new();
+    let renderer = Renderer::new();
     let camera = Camera::new();
+    let mut frame = Frame::new(500, 500);
     let scene = Scene {
         models: vec![model::Model {
             geometry: Box::new(Sphere {
@@ -53,10 +54,10 @@ fn main() {
 
     let mut current_path = env::current_dir().unwrap();
     println!("working dir {}", current_path.display());
-    renderer.render(&camera, &scene);
+    renderer.render(&camera, &scene, &mut frame);
     current_path.push("result.png");
     let file_target_path = current_path.into_os_string().into_string().unwrap();
 
     println!("writing file to path: {}", file_target_path);
-    renderer.frame.write_to_file(&file_target_path);
+    frame.write_to_file(&file_target_path);
 }
