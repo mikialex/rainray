@@ -10,7 +10,7 @@ pub struct Material {
 }
 
 impl Material {
-    pub fn brdf(&self, into_ray: &Ray, intersection: &Intersection, random: f64) -> Ray {
+    pub fn next_ray(&self, into_ray: &Ray, intersection: &Intersection, random: f64) -> Ray {
         unimplemented!();
     }
 

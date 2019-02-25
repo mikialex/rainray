@@ -21,6 +21,11 @@ impl Ray {
             direction: target - origin,
         }
     }
+
+    pub fn copy_from(&mut self, ray: &Ray) {
+        self.origin.copy_from(&ray.origin);
+        self.direction.copy_from(&ray.origin);
+    }
 }
 
 pub static MAX_RAY_HIT_DISTANCE: f64 = 1000.0;

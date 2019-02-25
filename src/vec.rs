@@ -37,6 +37,12 @@ impl Vec3 {
         self.z = self.z * inv_len;
         return self;
     }
+
+    pub fn copy_from(&mut self, other: &Vec3) {
+        self.x = other.x;
+        self.y = other.y;
+        self.z = other.z;
+    }
 }
 
 impl std::ops::Add for Vec3 {
@@ -82,6 +88,18 @@ impl std::ops::Mul<f64> for Vec3 {
     type Output = Vec3;
 }
 
+impl std::ops::Mul<Vec3> for Vec3 {
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
+
+    type Output = Vec3;
+}
+
 impl std::ops::MulAssign for Vec3 {
     fn mul_assign(&mut self, other: Vec3) -> () {
         self.x = self.x * other.x;
@@ -89,7 +107,6 @@ impl std::ops::MulAssign for Vec3 {
         self.z = self.z * other.z;
     }
 }
-
 
 impl std::ops::Div<f64> for Vec3 {
     fn div(self, scalar: f64) -> Vec3 {
@@ -104,7 +121,6 @@ impl std::ops::Div<f64> for Vec3 {
 }
 
 impl std::ops::Div<Vec3> for Vec3 {
-
     fn div(self, another: Vec3) -> Vec3 {
         Vec3 {
             x: self.x / another.x,

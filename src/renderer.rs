@@ -14,12 +14,15 @@ pub struct Renderer {
     exposure_upper_bound: f64,
     gamma: f64,
 
-    trace_fix_sample_count:u64,
+    trace_fix_sample_count: u64,
     bounce_time_limit: u64,
-
 }
 
-fn test_intersection_is_visible_to_point(scene: &Scene, intersection: &Intersection, point: &Vec3) -> bool {
+fn test_intersection_is_visible_to_point(
+    scene: &Scene,
+    intersection: &Intersection,
+    point: &Vec3,
+) -> bool {
     true
 }
 
@@ -43,21 +46,26 @@ impl Renderer {
         renderer
     }
 
-    pub fn path_trace(&self, ray: &Ray, scene: &Scene, camera: &Camera) -> Vec3 {
-        let mut energy_acc = Vec3::new(0.,0.,0.);
-        let mut diff_absorb = Vec3::new(0.,0.,0.);
+    pub fn path_trace(
+        &self,
+        ray: &Ray,
+        scene: &Scene,
+        camera: &Camera,
+        rng: &mut ThreadRng,
+    ) -> Vec3 {
+        let mut energy_acc = Vec3::new(0., 0., 0.);
+        let mut diff_absorb = Vec3::new(0., 0., 0.);
 
         let mut current_ray = ray.clone();
 
         for _sample in 0..self.bounce_time_limit {
-
             let mut min_distance = std::f64::INFINITY;
             let mut material: Option<Material> = None;
             let mut min_distance_intersection: Option<Intersection> = None;
-            
+
             // get min hit point
             for model in &scene.models {
-                if let Some(intersection) = model.geometry.intersect(current_ray)  {
+                if let Some(intersection) = model.geometry.intersect(current_ray) {
                     if intersection.distance < min_distance {
                         min_distance = intersection.distance;
                         material = Some(model.material);
@@ -67,22 +75,30 @@ impl Renderer {
             }
 
             if material.is_none() {
-                break
+                break;
             }
-
+            let material = material.unwrap();
             let min_distance_intersection = min_distance_intersection.unwrap();
-            diff_absorb *= material.unwrap().absorb_rate(&current_ray, &min_distance_intersection);
+            diff_absorb *= material.absorb_rate(&current_ray, &min_distance_intersection);
 
             // collect energy
             for light in &scene.point_lights {
                 if test_intersection_is_visible_to_point(
-                    &scene, &min_distance_intersection, &light.position) {
-                    energy_acc += material.unwrap().shade(&min_distance_intersection, &light);
+                    &scene,
+                    &min_distance_intersection,
+                    &light.position,
+                ) {
+                    energy_acc += material.shade(&min_distance_intersection, &light);
                 }
             }
+            let next = material.next_ray(
+                &current_ray,
+                &min_distance_intersection,
+                rng.gen());
+            current_ray.copy_from(&next);
         }
 
-        energy_acc / diff_absorb
+        energy_acc * diff_absorb
     }
 
     pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) -> () {
@@ -91,7 +107,8 @@ impl Renderer {
         let mut rng = rand::thread_rng();
         let mut render_frame = Frame::new(
             frame.width * self.super_sample_rate,
-            frame.height * self.super_sample_rate);
+            frame.height * self.super_sample_rate,
+        );
 
         let x_ratio_unit = 1.0 / render_frame.width as f64;
         let y_ratio_unit = 1.0 / render_frame.width as f64;
@@ -102,20 +119,18 @@ impl Renderer {
 
         for (i, row) in render_frame.data.iter_mut().enumerate() {
             for (j, pixel) in row.iter_mut().enumerate() {
-
                 let x_ratio = i as f64 * x_ratio_unit;
                 let y_ratio = j as f64 * y_ratio_unit;
                 let ray = camera.generate_pixel_ray(x_ratio, y_ratio);
-                
-                let mut energy_acc = Vec3::new(0.,0.,0.);
+
+                let mut energy_acc = Vec3::new(0., 0., 0.);
 
                 for _sample in 0..self.trace_fix_sample_count {
-                    energy_acc += self.path_trace(&ray, scene, camera);
+                    energy_acc += self.path_trace(&ray, scene, camera, &mut rng);
                 }
                 pixel.r = energy_acc.x / energy_div;
                 pixel.g = energy_acc.y / energy_div;
                 pixel.b = energy_acc.z / energy_div;
-
             }
             if i % bar_inv == 0 {
                 bar.inc(1);
