@@ -65,7 +65,7 @@ impl Renderer {
 
             // get min hit point
             for model in &scene.models {
-                if let Some(intersection) = model.geometry.intersect(current_ray) {
+                if let Some(intersection) = model.geometry.intersect(&current_ray) {
                     if intersection.distance < min_distance {
                         min_distance = intersection.distance;
                         material = Some(model.material);
