@@ -2,7 +2,7 @@ use crate::camera::*;
 use crate::frame::*;
 use crate::light::*;
 use crate::ray::*;
-use crate::vec::*;
+use crate::math::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Material {
@@ -10,8 +10,8 @@ pub struct Material {
 }
 
 impl Material {
-    pub fn next_ray(&self, into_ray: &Ray, intersection: &Intersection, random: f64) -> Ray {
-        unimplemented!();
+    pub fn next_ray(&self, _into_ray: &Ray, intersection: &Intersection) -> Ray {
+        Ray::new(intersection.hit_position, cosine_sample_hemisphere(&intersection.hit_normal))
     }
 
     pub fn absorb_rate(&self, _into_ray: &Ray, _intersection: &Intersection) -> Vec3 {

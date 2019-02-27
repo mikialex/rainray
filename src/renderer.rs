@@ -3,10 +3,9 @@ use crate::frame::*;
 use crate::material::*;
 use crate::ray::*;
 use crate::scene::*;
-use crate::vec::*;
+use crate::math::*;
 
 use indicatif::ProgressBar;
-use rand::prelude::*;
 use std::time::Instant;
 
 pub struct Renderer {
@@ -32,11 +31,8 @@ fn intersectionScene(scene: &Scene, point: &Vec3, test_point: &Vec3) -> bool {
 
 impl Renderer {
     pub fn new() -> Renderer {
-        let width = 500;
-        let height = 500;
         let super_sample_rate = 4;
-
-        let mut renderer = Renderer {
+        let renderer = Renderer {
             super_sample_rate,
             exposure_upper_bound: 1.0,
             gamma: 2.2,
@@ -46,13 +42,7 @@ impl Renderer {
         renderer
     }
 
-    pub fn path_trace(
-        &self,
-        ray: &Ray,
-        scene: &Scene,
-        camera: &Camera,
-        rng: &mut ThreadRng,
-    ) -> Vec3 {
+    pub fn path_trace(&self, ray: &Ray, scene: &Scene, _camera: &Camera) -> Vec3 {
         let mut energy_acc = Vec3::new(0., 0., 0.);
         let mut diff_absorb = Vec3::new(0., 0., 0.);
 
@@ -91,10 +81,7 @@ impl Renderer {
                     energy_acc += material.shade(&min_distance_intersection, &light);
                 }
             }
-            let next = material.next_ray(
-                &current_ray,
-                &min_distance_intersection,
-                rng.gen());
+            let next = material.next_ray(&current_ray, &min_distance_intersection);
             current_ray.copy_from(&next);
         }
 
@@ -104,7 +91,6 @@ impl Renderer {
     pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) -> () {
         println!("start render");
         let now = Instant::now();
-        let mut rng = rand::thread_rng();
         let mut render_frame = Frame::new(
             frame.width * self.super_sample_rate,
             frame.height * self.super_sample_rate,
@@ -126,7 +112,7 @@ impl Renderer {
                 let mut energy_acc = Vec3::new(0., 0., 0.);
 
                 for _sample in 0..self.trace_fix_sample_count {
-                    energy_acc += self.path_trace(&ray, scene, camera, &mut rng);
+                    energy_acc += self.path_trace(&ray, scene, camera);
                 }
                 pixel.r = energy_acc.x / energy_div;
                 pixel.g = energy_acc.y / energy_div;

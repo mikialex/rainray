@@ -1,5 +1,5 @@
 use crate::frame::*;
-use crate::vec::*;
+use crate::math::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct PointLight {

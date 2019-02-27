@@ -1,4 +1,4 @@
-use crate::vec::Vec3;
+use crate::math::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Ray {
@@ -30,7 +30,7 @@ impl Ray {
 }
 
 pub static MAX_RAY_HIT_DISTANCE: f64 = 1000.0;
-pub static EPS:f64 = 0.000000001
+pub static EPS:f64 = 0.000000001;
 
 pub trait Intersecterable {
     fn intersect(&self, ray: &Ray) -> Option<Intersection>;

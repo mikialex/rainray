@@ -1,6 +1,6 @@
 use crate::ray::*;
 use crate::ray::*;
-use crate::vec::*;
+use crate::math::*;
 
 struct Plane {
     center: Vec3,

@@ -7,8 +7,8 @@ mod ray;
 mod renderer;
 mod scene;
 mod geometry;
-mod vec;
 mod environment;
+mod math;
 
 use crate::environment::*;
 use crate::camera::*;
@@ -17,7 +17,7 @@ use crate::light::*;
 use crate::renderer::*;
 use crate::scene::*;
 use crate::geometry::*;
-use crate::vec::*;
+use crate::math::*;
 
 use std::env;
 

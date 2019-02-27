@@ -1,5 +1,5 @@
 use crate::ray::*;
-use crate::vec::Vec3;
+use crate::math::*;
 
 pub struct Camera {
     pub eye_position: Vec3,

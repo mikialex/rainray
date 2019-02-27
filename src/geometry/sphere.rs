@@ -1,5 +1,5 @@
 use crate::ray::*;
-use crate::vec::Vec3;
+use crate::math::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
