@@ -30,6 +30,7 @@ impl Material {
         let mut light_direction = light.position - intersection.hit_position;
         light_direction.normalize();
         let light_e = light.color * Vec3::dot(&intersection.hit_normal, &light_direction).max(0.0);
+        // let light_e = light.color;
         
         Vec3::new(
             self.diffuse_color.r * light_e.x,

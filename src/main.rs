@@ -38,7 +38,34 @@ fn main() {
             material: material::Material {
                 diffuse_color: Color::new(0.8, 0.8, 0.8),
             },
-        }],
+        },
+        model::Model {
+            geometry: Box::new(Sphere {
+                center: Vec3 {
+                    x: 0.,
+                    y: 4.,
+                    z: -5.,
+                },
+                radius: 2.,
+            }),
+            material: material::Material {
+                diffuse_color: Color::new(0.8, 0.8, 0.8),
+            },
+        },
+        model::Model {
+            geometry: Box::new(Sphere {
+                center: Vec3 {
+                    x: 3.,
+                    y: 4.,
+                    z: -5.,
+                },
+                radius: 2.,
+            }),
+            material: material::Material {
+                diffuse_color: Color::new(0.8, 0.8, 0.8),
+            },
+        }
+        ],
         point_lights: vec![PointLight {
             position: Vec3 {
                 x: -200.,

@@ -31,7 +31,7 @@ fn intersectionScene(scene: &Scene, point: &Vec3, test_point: &Vec3) -> bool {
 
 impl Renderer {
     pub fn new() -> Renderer {
-        let super_sample_rate = 4;
+        let super_sample_rate = 1;
         let renderer = Renderer {
             super_sample_rate,
             exposure_upper_bound: 1.0,
@@ -85,7 +85,7 @@ impl Renderer {
             current_ray.copy_from(&next);
         }
 
-        energy_acc * diff_absorb
+        energy_acc * (Vec3::new(1.0,1.0,1.0) - diff_absorb)
     }
 
     pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) -> () {

@@ -5,16 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(lldb) Launch",
-      "type": "cppdbg",
+      "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/target/debug/rainray",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": true,
-      "MIMode": "lldb"
+      "name": "Cargo launch",
+      "cargo": {
+        "args": [
+          "build",
+          // "--lib"
+        ]
+      },
+      "program": "${cargo:program}",
+      // "program": "${workspaceFolder}/target/debug/rainray",
+      "args": []
     },
     {
       "name": "(Windows) Launch",

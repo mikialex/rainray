@@ -13,11 +13,11 @@ pub struct Camera {
 impl Camera {
     pub fn new() -> Camera {
         Camera {
-            eye_position: Vec3::new(0., 0., 0.),
+            eye_position: Vec3::new(0., 0., 7.),
             up_direction: Vec3::new(0., 1., 0.),
-            film_width: 2.,
-            film_height: 2.,
-            film_center: Vec3::new(0., 0., -1.),
+            film_width: 4.,
+            film_height: 4.,
+            film_center: Vec3::new(0., 0., 3.),
         }
     }
 
