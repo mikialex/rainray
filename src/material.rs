@@ -1,4 +1,3 @@
-use crate::camera::*;
 use crate::frame::*;
 use crate::light::*;
 use crate::ray::*;
