@@ -43,6 +43,18 @@ impl Vec3 {
         self.y = other.y;
         self.z = other.z;
     }
+
+    pub fn min(&mut self, other: &Vec3) {
+        self.x = self.x.min(other.x);
+        self.y = self.y.min(other.y);
+        self.z = self.z.min(other.z);
+    }
+
+    pub fn max(&mut self, other: &Vec3) {
+        self.x = self.x.max(other.x);
+        self.y = self.y.max(other.y);
+        self.z = self.z.max(other.z);
+    }
 }
 
 impl std::ops::Add for Vec3 {
