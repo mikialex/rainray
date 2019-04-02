@@ -17,10 +17,14 @@ pub struct BVHNode {
     pub bounding_box: Box3,
     pub left: Option<Box<BVHNode>>,
     pub right: Option<Box<BVHNode>>,
-    pub split_axis: Axis,
+    pub split_axis: Option<Axis>,
     pub primitive_start: u64,
     pub primitive_count: u64,
+    pub depth: u64
 }
+
+const BVH_MAX_BIN_SIZE: u64 = 1;
+const BVH_MAX_DEPTH:u64 = 10;
 
 impl BVHNode{
     pub fn build_from_range_primitives(
@@ -32,20 +36,43 @@ impl BVHNode{
                 bounding_box: bbox,
                 left: None,
                 right: None,
-                split_axis: get_longest_axis_of_bounding(&bbox),
+                split_axis: None,
                 primitive_start: start,
                 primitive_count: count,
+                depth: 0
             }
     }
 
-    pub fn split(&mut self, primtive_list: &mut [Primitive], spliter: &Fn(&BVHNode) -> () ){
-        // TODO opti
-        match self.split_axis {
+    pub fn computed_split_axis(&mut self){
+        self.split_axis = Some(get_longest_axis_of_bounding(&self.bounding_box))
+    }
+
+    pub fn should_split(&self) -> bool {
+        return self.primitive_count < BVH_MAX_BIN_SIZE || self.depth > BVH_MAX_DEPTH
+    }
+
+    pub fn split(
+        node: &mut BVHNode, 
+        primtive_list: &mut [Primitive], 
+        spliter: &Fn(&mut BVHNode) -> () 
+        ){
+        if !node.should_split() {
+            return;
+        }
+
+        node.computed_split_axis();
+
+        // TODO opti, maybe we should put this procedure in spliter
+        match node.split_axis.unwrap() {
             Axis::x => primtive_list.sort_unstable_by(|a, b| a.cmp_center_x(b)),
             Axis::y => primtive_list.sort_unstable_by(|a, b| a.cmp_center_y(b)),
             Axis::z => primtive_list.sort_unstable_by(|a, b| a.cmp_center_z(b)),
         }
 
+        spliter(node);
+
+        // let mut left_node: &BVHNode = &node.left.unwrap();
+        // BVHNode::split(left_node, primtive_list, spliter);
     }
 }
 
