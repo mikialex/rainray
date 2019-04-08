@@ -26,6 +26,8 @@ pub struct BVHNode {
 const BVH_MAX_BIN_SIZE: u64 = 1;
 const BVH_MAX_DEPTH:u64 = 10;
 
+
+// https://matthias-endler.de/2017/boxes-and-trees/
 impl BVHNode{
     pub fn build_from_range_primitives(
         primitive_list: &Vec<Primitive>,
@@ -52,32 +54,37 @@ impl BVHNode{
     }
 
     pub fn split(
-        node: &mut BVHNode, 
+        &mut self, 
         primtive_list: &mut [Primitive], 
         spliter: &Fn(&mut BVHNode) -> () 
         ){
-        if !node.should_split() {
+        if !self.should_split() {
             return;
         }
 
-        node.computed_split_axis();
+        self.computed_split_axis();
 
         // TODO opti, maybe we should put this procedure in spliter
-        match node.split_axis.unwrap() {
-            Axis::x => primtive_list.sort_unstable_by(|a, b| a.cmp_center_x(b)),
-            Axis::y => primtive_list.sort_unstable_by(|a, b| a.cmp_center_y(b)),
-            Axis::z => primtive_list.sort_unstable_by(|a, b| a.cmp_center_z(b)),
+        match self.split_axis {
+            Some(Axis::x) => primtive_list.sort_unstable_by(|a, b| a.cmp_center_x(b)),
+            Some(Axis::y) => primtive_list.sort_unstable_by(|a, b| a.cmp_center_y(b)),
+            Some(Axis::z) => primtive_list.sort_unstable_by(|a, b| a.cmp_center_z(b)),
+            None => panic!("")
         }
 
-        spliter(node);
+        spliter(self);
 
-        // let mut left_node: &BVHNode = &node.left.unwrap();
-        // BVHNode::split(left_node, primtive_list, spliter);
+        match &mut self.left {
+            Some(node) => &node.split(primtive_list, spliter),
+            None => panic!("")
+        };
+        // self.left.split(primtive_list, spliter);
     }
 }
 
-fn build_equal_counts(node:&mut BVHNode){
-    
+fn build_equal_counts(node: &mut BVHNode){
+    node.left = None;
+    node.right = None;
 }
 
 
@@ -115,7 +122,7 @@ impl BVHAccel{
             root: BVHNode::build_from_range_primitives(&primitives, 0, primitives.len() as u64),
             primitives
         };
-        // bvh.root.split(&primitives, &build_equal_counts);
+        bvh.root.split(&mut bvh.primitives, &build_equal_counts);
         bvh
     }
 
