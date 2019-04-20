@@ -23,9 +23,9 @@ pub struct BVHNode {
 }
 
 pub struct Primitive {
-    bounding_box: Box3,
-    center_point: Vec3,
-    index: u64,
+    pub bounding_box: Box3,
+    pub center_point: Vec3,
+    pub index: u64,
 }
 
 pub struct BVHAccel {
