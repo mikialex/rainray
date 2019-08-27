@@ -54,6 +54,6 @@ impl IndexMesh {
 
 
 fn build_bvh_from_index_mesh(mesh: &IndexMesh) -> BVHAccel {
-    let primitive_list = mesh.gen_primitive_list();
+    let _primitive_list = mesh.gen_primitive_list();
     unimplemented!()
 }

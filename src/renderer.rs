@@ -18,14 +18,14 @@ pub struct Renderer {
 }
 
 fn test_intersection_is_visible_to_point(
-    scene: &Scene,
-    intersection: &Intersection,
-    point: &Vec3,
+    _scene: &Scene,
+    _intersection: &Intersection,
+    _point: &Vec3,
 ) -> bool {
     true
 }
 
-fn intersectionScene(scene: &Scene, point: &Vec3, test_point: &Vec3) -> bool {
+fn intersectionScene(_scene: &Scene, _point: &Vec3, _test_point: &Vec3) -> bool {
     true
 }
 

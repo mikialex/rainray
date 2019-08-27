@@ -56,7 +56,7 @@ impl BVHNode{
     pub fn split(
         &mut self, 
         primtive_list: &mut [Primitive], 
-        spliter: &Fn(&mut BVHNode) -> () 
+        spliter: &dyn Fn(&mut BVHNode) -> () 
         ){
         if !self.should_split() {
             return;

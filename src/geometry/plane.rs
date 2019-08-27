@@ -1,5 +1,5 @@
 use crate::ray::*;
-use crate::ray::*;
+
 use crate::math::*;
 
 struct Plane {
@@ -14,7 +14,7 @@ impl Plane {
 }
 
 impl Intersecterable for Plane {
-    fn intersect(&self, ray: &Ray) -> Option<Intersection> {
+    fn intersect(&self, _ray: &Ray) -> Option<Intersection> {
         unimplemented!();
     }
 }
