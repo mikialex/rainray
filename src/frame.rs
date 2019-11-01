@@ -41,12 +41,11 @@ pub struct Frame {
 
 impl Frame {
     pub fn new(width: u64, height: u64) -> Frame {
-        let frame = Frame {
+        Frame {
             width,
             height,
             data: vec![vec![Color::new(0.0, 0.0, 0.0); height as usize]; width as usize],
-        };
-        return frame;
+        }
     }
 
     pub fn clear(&mut self, color: &Color) {
@@ -64,7 +63,7 @@ impl Frame {
     #[allow(dead_code)]
     pub fn set_pixel(&mut self, color: &Color, x: u64, y: u64) {
         let data = &mut self.data;
-        data[x as usize][y as usize] = color.clone();
+        data[x as usize][y as usize] = *color;
     }
 
     pub fn pixel_count(&self) -> u64 {

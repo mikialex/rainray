@@ -1,9 +1,9 @@
 use crate::camera::*;
 use crate::frame::*;
 use crate::material::*;
+use crate::math::*;
 use crate::ray::*;
 use crate::scene::*;
-use crate::math::*;
 
 use indicatif::ProgressBar;
 use std::time::Instant;
@@ -25,28 +25,23 @@ fn test_intersection_is_visible_to_point(
     true
 }
 
-fn intersectionScene(_scene: &Scene, _point: &Vec3, _test_point: &Vec3) -> bool {
-    true
-}
-
 impl Renderer {
     pub fn new() -> Renderer {
         let super_sample_rate = 1;
-        let renderer = Renderer {
+        Renderer {
             super_sample_rate,
             exposure_upper_bound: 1.0,
             gamma: 2.2,
             bounce_time_limit: 1,
             trace_fix_sample_count: 3,
-        };
-        renderer
+        }
     }
 
     pub fn path_trace(&self, ray: &Ray, scene: &Scene, _camera: &Camera) -> Vec3 {
         let mut energy_acc = Vec3::new(0., 0., 0.);
         let mut diff_absorb = Vec3::new(0., 0., 0.);
 
-        let mut current_ray = ray.clone();
+        let mut current_ray = *ray;
 
         for _sample in 0..self.bounce_time_limit {
             let mut min_distance = std::f64::INFINITY;
@@ -85,10 +80,10 @@ impl Renderer {
             current_ray.copy_from(&next);
         }
 
-        energy_acc * (Vec3::new(1.0,1.0,1.0) - diff_absorb)
+        energy_acc * (Vec3::new(1.0, 1.0, 1.0) - diff_absorb)
     }
 
-    pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) -> () {
+    pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) {
         println!("start render");
         let now = Instant::now();
         let mut render_frame = Frame::new(
@@ -100,7 +95,7 @@ impl Renderer {
         let y_ratio_unit = 1.0 / render_frame.width as f64;
         let energy_div = self.trace_fix_sample_count as f64 * self.exposure_upper_bound;
 
-        let bar = ProgressBar::new(100);
+        let progress_bar = ProgressBar::new(100);
         let bar_inv = (render_frame.width as f64 / 100.).ceil() as usize;
 
         for (i, row) in render_frame.data.iter_mut().enumerate() {
@@ -119,10 +114,10 @@ impl Renderer {
                 pixel.b = energy_acc.z / energy_div;
             }
             if i % bar_inv == 0 {
-                bar.inc(1);
+                progress_bar.inc(1);
             }
         }
-        bar.finish_and_clear();
+        progress_bar.finish_and_clear();
         println!("frame data render finished.");
 
         println!("start super sample down sample and gamma corration");
