@@ -32,7 +32,7 @@ fn main() {
             Rc::new(model::Model::new(
                 Box::new(Sphere::new((-1., -1., -5.), 3.0)),
                 material::Material {
-                    diffuse_color: Color::new(0.8, 0.8, 0.8),
+                    diffuse_color: Color::new(0.95, 0.95, 0.95),
                 },
             )),
             Rc::new(model::Model {
@@ -41,7 +41,7 @@ fn main() {
                     radius: 1.5,
                 }),
                 material: material::Material {
-                    diffuse_color: Color::new(0.4, 0.2, 0.8),
+                    diffuse_color: Color::new(0.6, 0.4, 0.8),
                 },
             }),
             Rc::new(model::Model {
@@ -66,8 +66,10 @@ fn main() {
             },
             color: Vec3::new(1.0, 1.0, 1.0),
         }],
-        env: Box::new(SolidEnvironment {
-            intensity: Vec3::new(0.8, 0.8, 0.8),
+        env: Box::new(GradientEnvironment {
+            top_intensity: Vec3::new(1.0, 1.0, 1.0),
+            bottom_intensity: Vec3::new(1.0, 1.0, 1.0),
+            // bottom_intensity: Vec3::new(0.9, 0.9, 0.9),
         }),
     };
 

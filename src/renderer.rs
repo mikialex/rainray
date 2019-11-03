@@ -37,41 +37,41 @@ impl Renderer {
         let super_sample_rate = 1;
         Renderer {
             super_sample_rate,
-            exposure_upper_bound: 1.5,
+            exposure_upper_bound: 1.0,
             gamma: 2.2,
-            bounce_time_limit: 4,
-            trace_fix_sample_count: 10,
+            bounce_time_limit: 5,
+            trace_fix_sample_count: 40,
         }
     }
 
     pub fn path_trace(&self, ray: &Ray, scene: &Scene, _camera: &Camera) -> Vec3 {
         let mut energy_acc = Vec3::new(0., 0., 0.);
-
+        let mut diff_absorb = Vec3::new(1., 1., 1.);
         let mut current_ray = *ray;
 
         for _depth in 0..self.bounce_time_limit {
             let hit_result = scene.get_min_dist_hit(&current_ray);
 
             if hit_result.is_none() {
-                energy_acc += scene.env.sample(&current_ray);
+                energy_acc += scene.env.sample(&current_ray) * diff_absorb;
                 break;
             }
             let (min_distance_intersection, model) = hit_result.unwrap();
-            let diff_absorb = model
+            diff_absorb = model
                 .material
                 .absorb_rate(&current_ray, &min_distance_intersection);
 
             // collect energy
-            for light in &scene.point_lights {
-                if test_intersection_is_visible_to_point(
-                    &scene,
-                    &min_distance_intersection,
-                    &light.position,
-                ) {
-                    energy_acc +=
-                        model.material.shade(&min_distance_intersection, &light) * diff_absorb;
-                }
-            }
+            // for light in &scene.point_lights {
+            //     if test_intersection_is_visible_to_point(
+            //         &scene,
+            //         &min_distance_intersection,
+            //         &light.position,
+            //     ) {
+            //         energy_acc +=
+            //             model.material.shade(&min_distance_intersection, &light) * diff_absorb;
+            //     }
+            // }
             let next = model
                 .material
                 .next_ray(&current_ray, &min_distance_intersection);

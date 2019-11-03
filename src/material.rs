@@ -23,6 +23,14 @@ impl Material {
             &intersection.hit_position,
             &(intersection.hit_position + intersection.hit_normal + rand_point_in_unit_sphere()),
         )
+
+        // Ray::from_point_to_point(
+        //     &intersection.hit_position,
+        //     &(intersection.hit_position
+        //         + intersection.hit_normal
+        //         + 0.5 * rand_point_in_unit_sphere()
+        //         + Vec3::reflect(&intersection.hit_normal, &into_ray.direction)),
+        // )
     }
 
     pub fn absorb_rate(&self, _into_ray: &Ray, _intersection: &Intersection) -> Vec3 {
