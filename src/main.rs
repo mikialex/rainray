@@ -30,7 +30,7 @@ fn main() {
     let scene = Scene {
         models: vec![
             Rc::new(model::Model::new(
-                Box::new(Sphere::new((0., 0., -5.), 2.0)),
+                Box::new(Sphere::new((-1., -1., -5.), 3.0)),
                 material::Material {
                     diffuse_color: Color::new(0.8, 0.8, 0.8),
                 },
@@ -38,7 +38,7 @@ fn main() {
             Rc::new(model::Model {
                 geometry: Box::new(Sphere {
                     center: Vec3::new(0., 4., -5.),
-                    radius: 2.,
+                    radius: 1.5,
                 }),
                 material: material::Material {
                     diffuse_color: Color::new(0.8, 0.2, 0.8),
@@ -48,7 +48,7 @@ fn main() {
                 geometry: Box::new(Sphere {
                     center: Vec3 {
                         x: 3.,
-                        y: 4.,
+                        y: -1.,
                         z: -5.,
                     },
                     radius: 2.,

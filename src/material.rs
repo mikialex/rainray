@@ -9,10 +9,14 @@ pub struct Material {
 }
 
 impl Material {
-    pub fn next_ray(&self, _into_ray: &Ray, intersection: &Intersection) -> Ray {
+    pub fn next_ray(&self, into_ray: &Ray, intersection: &Intersection) -> Ray {
+        // Ray::new(
+        //     intersection.hit_position,
+        //     cosine_sample_hemisphere(&intersection.hit_normal),
+        // )
         Ray::new(
             intersection.hit_position,
-            cosine_sample_hemisphere(&intersection.hit_normal),
+            Vec3::reflect(&intersection.hit_normal, &into_ray.direction),
         )
     }
 

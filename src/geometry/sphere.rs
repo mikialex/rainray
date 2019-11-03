@@ -25,7 +25,7 @@ impl Intersecterable for Sphere {
         let a_sqr = voc_len_sqr - (vod_len * vod_len); // The length squared of the line between c and the ray
         let radius_square = self.radius * self.radius; // Radius squared
                                                        // println!("{}", a_sqr);
-        if a_sqr <= radius_square {
+        if a_sqr <= radius_square + EPS {
             let b = (radius_square - a_sqr).sqrt(); // the distance between o and the intersection with the sphere
 
             let distance = if vod_len - b < 0.0 {
@@ -34,7 +34,7 @@ impl Intersecterable for Sphere {
                 vod_len - b
             };
 
-            if distance > 0.0 {
+            if distance > EPS {
                 if distance > MAX_RAY_HIT_DISTANCE {
                     return None; // too far
                 }

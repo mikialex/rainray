@@ -14,6 +14,10 @@ impl Vec3 {
         vec_a.x * vec_b.x + vec_a.y * vec_b.y + vec_a.z * vec_b.z
     }
 
+    pub fn reflect(normal: &Vec3, in_ray: &Vec3) -> Vec3 {
+        *in_ray - 2. * Vec3::dot(normal, in_ray) * (*normal)
+    }
+
     pub fn cross(vec_a: &Vec3, vec_b: &Vec3) -> Vec3 {
         Vec3 {
             x: vec_a.y * vec_b.z - vec_a.z * vec_b.y,
@@ -98,6 +102,18 @@ impl std::ops::Mul<f64> for Vec3 {
             x: self.x * scalar,
             y: self.y * scalar,
             z: self.z * scalar,
+        }
+    }
+
+    type Output = Vec3;
+}
+
+impl std::ops::Mul<Vec3> for f64 {
+    fn mul(self, vec: Vec3) -> Vec3 {
+        Vec3 {
+            x: self * vec.x,
+            y: self * vec.y,
+            z: self * vec.z,
         }
     }
 
