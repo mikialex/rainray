@@ -40,7 +40,7 @@ fn main() {
                     radius: 2.,
                 }),
                 material: material::Material {
-                    diffuse_color: Color::new(0.8, 0.8, 0.8),
+                    diffuse_color: Color::new(0.8, 0.2, 0.8),
                 },
             },
             model::Model {
@@ -53,7 +53,7 @@ fn main() {
                     radius: 2.,
                 }),
                 material: material::Material {
-                    diffuse_color: Color::new(0.8, 0.8, 0.8),
+                    diffuse_color: Color::new(0.8, 0.8, 0.2),
                 },
             },
         ],

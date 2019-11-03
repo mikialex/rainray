@@ -22,7 +22,11 @@ fn test_intersection_is_visible_to_point(
     _intersection: &Intersection,
     _point: &Vec3,
 ) -> bool {
-    true
+    
+    // let mut light_direction = light.position - intersection.hit_position;
+    // light_direction.normalize();
+    // true
+    false
 }
 
 impl Renderer {
@@ -32,18 +36,18 @@ impl Renderer {
             super_sample_rate,
             exposure_upper_bound: 1.0,
             gamma: 2.2,
-            bounce_time_limit: 1,
-            trace_fix_sample_count: 3,
+            bounce_time_limit: 3,
+            trace_fix_sample_count: 15,
         }
     }
 
     pub fn path_trace(&self, ray: &Ray, scene: &Scene, _camera: &Camera) -> Vec3 {
         let mut energy_acc = Vec3::new(0., 0., 0.);
-        let mut diff_absorb = Vec3::new(0., 0., 0.);
 
         let mut current_ray = *ray;
+        // let mut start_material: Option<Material> = None;
 
-        for _sample in 0..self.bounce_time_limit {
+        for _depth in 0..self.bounce_time_limit {
             let mut min_distance = std::f64::INFINITY;
             let mut material: Option<Material> = None;
             let mut min_distance_intersection: Option<Intersection> = None;
@@ -65,7 +69,7 @@ impl Renderer {
             }
             let material = material.unwrap();
             let min_distance_intersection = min_distance_intersection.unwrap();
-            diff_absorb *= material.absorb_rate(&current_ray, &min_distance_intersection);
+            let diff_absorb = material.absorb_rate(&current_ray, &min_distance_intersection);
 
             // collect energy
             for light in &scene.point_lights {
@@ -74,14 +78,14 @@ impl Renderer {
                     &min_distance_intersection,
                     &light.position,
                 ) {
-                    energy_acc += material.shade(&min_distance_intersection, &light);
+                    energy_acc += material.shade(&min_distance_intersection, &light) * diff_absorb;
                 }
             }
             let next = material.next_ray(&current_ray, &min_distance_intersection);
             current_ray.copy_from(&next);
         }
 
-        energy_acc * (Vec3::new(1.0, 1.0, 1.0) - diff_absorb)
+        energy_acc
     }
 
     pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) {

@@ -25,7 +25,7 @@ impl Ray {
 
     pub fn copy_from(&mut self, ray: &Ray) {
         self.origin.copy_from(&ray.origin);
-        self.direction.copy_from(&ray.origin);
+        self.direction.copy_from(&ray.direction);
     }
 }
 
