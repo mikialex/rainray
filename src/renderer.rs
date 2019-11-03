@@ -40,7 +40,7 @@ impl Renderer {
             exposure_upper_bound: 1.5,
             gamma: 2.2,
             bounce_time_limit: 4,
-            trace_fix_sample_count: 1,
+            trace_fix_sample_count: 10,
         }
     }
 

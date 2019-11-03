@@ -41,7 +41,7 @@ fn main() {
                     radius: 1.5,
                 }),
                 material: material::Material {
-                    diffuse_color: Color::new(0.8, 0.2, 0.8),
+                    diffuse_color: Color::new(0.4, 0.2, 0.8),
                 },
             }),
             Rc::new(model::Model {
@@ -54,15 +54,15 @@ fn main() {
                     radius: 2.,
                 }),
                 material: material::Material {
-                    diffuse_color: Color::new(0.8, 0.8, 0.2),
+                    diffuse_color: Color::new(0.8, 0.6, 0.2),
                 },
             }),
         ],
         point_lights: vec![PointLight {
             position: Vec3 {
                 x: -200.,
-                y: 0.,
-                z: 200.,
+                y: -200.,
+                z: 100.,
             },
             color: Vec3::new(1.0, 1.0, 1.0),
         }],

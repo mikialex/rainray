@@ -14,9 +14,14 @@ impl Material {
         //     intersection.hit_position,
         //     cosine_sample_hemisphere(&intersection.hit_normal),
         // )
-        Ray::new(
-            intersection.hit_position,
-            Vec3::reflect(&intersection.hit_normal, &into_ray.direction),
+        // Ray::new(
+        //     intersection.hit_position,
+        //     Vec3::reflect(&intersection.hit_normal, &into_ray.direction),
+        // )
+
+        Ray::from_point_to_point(
+            &intersection.hit_position,
+            &(intersection.hit_position + intersection.hit_normal + rand_point_in_unit_sphere()),
         )
     }
 

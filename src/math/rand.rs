@@ -34,3 +34,12 @@ pub fn cosine_sample_hemisphere(normal: &Vec3) -> Vec3 {
 
     Vec3::new(0.0, 1.0, 0.0)
 }
+
+pub fn rand_point_in_unit_sphere() -> Vec3 {
+    loop {
+        let test_point = Vec3::new(rand() * 2.0 - 1.0, rand() * 2.0 - 1.0, rand() * 2.0 - 1.0);
+        if test_point.length() <= 1. {
+            break test_point;
+        }
+    }
+}
