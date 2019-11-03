@@ -1,6 +1,5 @@
 use crate::camera::*;
 use crate::frame::*;
-use crate::material::*;
 use crate::math::*;
 use crate::ray::*;
 use crate::scene::*;
@@ -18,15 +17,19 @@ pub struct Renderer {
 }
 
 fn test_intersection_is_visible_to_point(
-    _scene: &Scene,
-    _intersection: &Intersection,
-    _point: &Vec3,
+    scene: &Scene,
+    intersection: &Intersection,
+    point: &Vec3,
 ) -> bool {
-    
-    // let mut light_direction = light.position - intersection.hit_position;
-    // light_direction.normalize();
-    // true
-    false
+    let distance = (*point - intersection.hit_position).length();
+    let test_ray = Ray::from_point_to_point(&intersection.hit_position, point);
+    let hit_result = scene.get_min_dist_hit(&test_ray);
+
+    if let Some(hit_result) = hit_result {
+        hit_result.0.distance > distance
+    } else {
+        true
+    }
 }
 
 impl Renderer {
@@ -45,31 +48,18 @@ impl Renderer {
         let mut energy_acc = Vec3::new(0., 0., 0.);
 
         let mut current_ray = *ray;
-        // let mut start_material: Option<Material> = None;
 
         for _depth in 0..self.bounce_time_limit {
-            let mut min_distance = std::f64::INFINITY;
-            let mut material: Option<Material> = None;
-            let mut min_distance_intersection: Option<Intersection> = None;
+            let hit_result = scene.get_min_dist_hit(&current_ray);
 
-            // get min hit point
-            for model in &scene.models {
-                if let Some(intersection) = model.geometry.intersect(&current_ray) {
-                    if intersection.distance < min_distance {
-                        min_distance = intersection.distance;
-                        material = Some(model.material);
-                        min_distance_intersection = Some(intersection);
-                    }
-                }
-            }
-
-            if material.is_none() {
+            if hit_result.is_none() {
                 energy_acc += scene.env.sample(&current_ray);
                 break;
             }
-            let material = material.unwrap();
-            let min_distance_intersection = min_distance_intersection.unwrap();
-            let diff_absorb = material.absorb_rate(&current_ray, &min_distance_intersection);
+            let (min_distance_intersection, model) = hit_result.unwrap();
+            let diff_absorb = model
+                .material
+                .absorb_rate(&current_ray, &min_distance_intersection);
 
             // collect energy
             for light in &scene.point_lights {
@@ -78,10 +68,13 @@ impl Renderer {
                     &min_distance_intersection,
                     &light.position,
                 ) {
-                    energy_acc += material.shade(&min_distance_intersection, &light) * diff_absorb;
+                    energy_acc +=
+                        model.material.shade(&min_distance_intersection, &light) * diff_absorb;
                 }
             }
-            let next = material.next_ray(&current_ray, &min_distance_intersection);
+            let next = model
+                .material
+                .next_ray(&current_ray, &min_distance_intersection);
             current_ray.copy_from(&next);
         }
 

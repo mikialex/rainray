@@ -16,10 +16,10 @@ impl Ray {
         Ray { origin, direction }
     }
 
-    pub fn from_point_to_point(origin: Vec3, target: Vec3) -> Ray {
+    pub fn from_point_to_point(origin: &Vec3, target: &Vec3) -> Ray {
         Ray {
             origin: origin.clone(),
-            direction: target - origin,
+            direction: *(*target - *origin).normalize(),
         }
     }
 
@@ -30,7 +30,7 @@ impl Ray {
 }
 
 pub static MAX_RAY_HIT_DISTANCE: f64 = 1000.0;
-pub static EPS:f64 = 0.000000001;
+pub static EPS: f64 = 0.000000001;
 
 pub trait Intersecterable {
     fn intersect(&self, ray: &Ray) -> Option<Intersection>;

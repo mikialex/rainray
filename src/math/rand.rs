@@ -15,9 +15,9 @@ pub fn cosine_sample_hemisphere(normal: &Vec3) -> Vec3 {
     // let r2 = rand();
     // let r3 = r2.sqrt();
 
-    // let mut u = if normal.x.abs() > 0.1 { 
+    // let mut u = if normal.x.abs() > 0.1 {
     //     Vec3::new(normal.z, 0.0, -normal.x)
-    // } else { 
+    // } else {
     //     Vec3::new(0.0, -normal.z, normal.y)
     // };
     // u.normalize();
@@ -30,7 +30,6 @@ pub fn cosine_sample_hemisphere(normal: &Vec3) -> Vec3 {
     // let phi = 2. * std::f64::consts::PI * u2;
     // *Vec3::new(phi.cos() * r, phi.sin() * r, u2).normalize()
 
-    
     *Vec3::new(rand(), rand(), rand()).normalize()
 
     // Vec3::new(1.0, 0.0, 0.0)

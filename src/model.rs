@@ -7,10 +7,7 @@ pub struct Model {
 }
 
 impl Model {
-    pub fn new(geometry: Box<dyn Intersecterable>, material: Material) -> Self{
-        Model {
-            geometry,
-            material,
-        }
+    pub fn new(geometry: Box<dyn Intersecterable>, material: Material) -> Self {
+        Model { geometry, material }
     }
 }

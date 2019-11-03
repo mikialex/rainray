@@ -19,6 +19,7 @@ use crate::light::*;
 use crate::math::*;
 use crate::renderer::*;
 use crate::scene::*;
+use std::rc::Rc;
 
 use std::env;
 
@@ -28,13 +29,13 @@ fn main() {
     let mut frame = Frame::new(500, 500);
     let scene = Scene {
         models: vec![
-            model::Model::new(
+            Rc::new(model::Model::new(
                 Box::new(Sphere::new((0., 0., -5.), 2.0)),
                 material::Material {
                     diffuse_color: Color::new(0.8, 0.8, 0.8),
-                }
-            ),
-            model::Model {
+                },
+            )),
+            Rc::new(model::Model {
                 geometry: Box::new(Sphere {
                     center: Vec3::new(0., 4., -5.),
                     radius: 2.,
@@ -42,8 +43,8 @@ fn main() {
                 material: material::Material {
                     diffuse_color: Color::new(0.8, 0.2, 0.8),
                 },
-            },
-            model::Model {
+            }),
+            Rc::new(model::Model {
                 geometry: Box::new(Sphere {
                     center: Vec3 {
                         x: 3.,
@@ -55,7 +56,7 @@ fn main() {
                 material: material::Material {
                     diffuse_color: Color::new(0.8, 0.8, 0.2),
                 },
-            },
+            }),
         ],
         point_lights: vec![PointLight {
             position: Vec3 {

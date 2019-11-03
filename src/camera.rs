@@ -1,5 +1,5 @@
-use crate::ray::*;
 use crate::math::*;
+use crate::ray::*;
 
 pub struct Camera {
     pub eye_position: Vec3,
@@ -34,8 +34,8 @@ impl Camera {
 
     pub fn generate_pixel_ray(&self, x_ratio: f64, y_ratio: f64) -> Ray {
         let mut ray = Ray::from_point_to_point(
-            self.eye_position,
-            self.get_pixel_world_position(x_ratio, y_ratio),
+            &self.eye_position,
+            &self.get_pixel_world_position(x_ratio, y_ratio),
         );
         ray.direction.normalize();
         ray
