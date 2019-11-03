@@ -1,10 +1,19 @@
-use crate::ray::*;
 use crate::math::*;
+use crate::ray::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
     pub center: Vec3,
     pub radius: f64,
+}
+
+impl Sphere {
+    pub fn new(center: (f64, f64, f64), radius: f64) -> Self {
+        Sphere {
+            center: Vec3::new(center.0, center.1, center.2),
+            radius,
+        }
+    }
 }
 
 impl Intersecterable for Sphere {

@@ -1,25 +1,24 @@
+mod bvh;
 mod camera;
+mod environment;
 mod frame;
+mod geometry;
 mod light;
 mod material;
+mod math;
 mod model;
 mod ray;
 mod renderer;
 mod scene;
-mod geometry;
-mod environment;
-mod math;
-mod bvh;
 
-use crate::environment::*;
 use crate::camera::*;
+use crate::environment::*;
 use crate::frame::*;
+use crate::geometry::*;
 use crate::light::*;
+use crate::math::*;
 use crate::renderer::*;
 use crate::scene::*;
-use crate::geometry::*;
-use crate::math::*;
-
 
 use std::env;
 
@@ -28,45 +27,35 @@ fn main() {
     let camera = Camera::new();
     let mut frame = Frame::new(500, 500);
     let scene = Scene {
-        models: vec![model::Model {
-            geometry: Box::new(Sphere {
-                center: Vec3 {
-                    x: 0.,
-                    y: 0.,
-                    z: -5.,
+        models: vec![
+            model::Model::new(
+                Box::new(Sphere::new((0., 0., -5.), 2.0)),
+                material::Material {
+                    diffuse_color: Color::new(0.8, 0.8, 0.8),
+                }
+            ),
+            model::Model {
+                geometry: Box::new(Sphere {
+                    center: Vec3::new(0., 4., -5.),
+                    radius: 2.,
+                }),
+                material: material::Material {
+                    diffuse_color: Color::new(0.8, 0.8, 0.8),
                 },
-                radius: 2.,
-            }),
-            material: material::Material {
-                diffuse_color: Color::new(0.8, 0.8, 0.8),
             },
-        },
-        model::Model {
-            geometry: Box::new(Sphere {
-                center: Vec3 {
-                    x: 0.,
-                    y: 4.,
-                    z: -5.,
+            model::Model {
+                geometry: Box::new(Sphere {
+                    center: Vec3 {
+                        x: 3.,
+                        y: 4.,
+                        z: -5.,
+                    },
+                    radius: 2.,
+                }),
+                material: material::Material {
+                    diffuse_color: Color::new(0.8, 0.8, 0.8),
                 },
-                radius: 2.,
-            }),
-            material: material::Material {
-                diffuse_color: Color::new(0.8, 0.8, 0.8),
             },
-        },
-        model::Model {
-            geometry: Box::new(Sphere {
-                center: Vec3 {
-                    x: 3.,
-                    y: 4.,
-                    z: -5.,
-                },
-                radius: 2.,
-            }),
-            material: material::Material {
-                diffuse_color: Color::new(0.8, 0.8, 0.8),
-            },
-        }
         ],
         point_lights: vec![PointLight {
             position: Vec3 {
@@ -76,9 +65,9 @@ fn main() {
             },
             color: Vec3::new(1.0, 1.0, 1.0),
         }],
-        env: Box::new(SolidEnvironment{
-            color: Color::new(0.8, 0.8, 0.8),
-        })
+        env: Box::new(SolidEnvironment {
+            intensity: Vec3::new(0.8, 0.8, 0.8),
+        }),
     };
 
     let mut current_path = env::current_dir().unwrap();

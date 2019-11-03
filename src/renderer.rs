@@ -60,6 +60,7 @@ impl Renderer {
             }
 
             if material.is_none() {
+                energy_acc += scene.env.sample(&current_ray);
                 break;
             }
             let material = material.unwrap();

@@ -1,16 +1,16 @@
-use crate::frame::*;
+use crate::math::vec3::Vec3;
 use crate::ray::*;
 
 pub struct SolidEnvironment{
-    pub color: Color
+    pub intensity: Vec3
 }
 
 pub trait Environment{
-    fn sample_color(&self, ray: &Ray) -> Color;
+    fn sample(&self, ray: &Ray) -> Vec3;
 }
 
 impl Environment for SolidEnvironment{
-    fn sample_color(&self, _ray: &Ray) -> Color{
-        self.color
+    fn sample(&self, _ray: &Ray) -> Vec3{
+        self.intensity
     }
 }
