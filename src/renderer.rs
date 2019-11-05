@@ -45,40 +45,34 @@ impl Renderer {
     }
 
     pub fn path_trace(&self, ray: &Ray, scene: &Scene, _camera: &Camera) -> Vec3 {
-        let mut energy_acc = Vec3::new(0., 0., 0.);
-        let mut diff_absorb = Vec3::new(1., 1., 1.);
+        let mut energy = Vec3::new(0., 0., 0.);
+        let mut throughput = Vec3::new(1., 1., 1.);
         let mut current_ray = *ray;
 
         for _depth in 0..self.bounce_time_limit {
             let hit_result = scene.get_min_dist_hit(&current_ray);
 
             if hit_result.is_none() {
-                energy_acc += scene.env.sample(&current_ray) * diff_absorb;
+                energy += scene.env.sample(&current_ray) * throughput;
                 break;
             }
             let (min_distance_intersection, model) = hit_result.unwrap();
-            diff_absorb = model
-                .material
-                .absorb_rate(&current_ray, &min_distance_intersection);
+            let material = model.material;
 
-            // collect energy
-            // for light in &scene.point_lights {
-            //     if test_intersection_is_visible_to_point(
-            //         &scene,
-            //         &min_distance_intersection,
-            //         &light.position,
-            //     ) {
-            //         energy_acc +=
-            //             model.material.shade(&min_distance_intersection, &light) * diff_absorb;
-            //     }
-            // }
-            let next = model
-                .material
-                .next_ray(&current_ray, &min_distance_intersection);
-            current_ray.copy_from(&next);
+            energy += material.collect_energy(&current_ray) * throughput;
+
+            let next_ray = model.material.next_ray(&current_ray, &min_distance_intersection);
+
+            let brdf = model.material.BRDF(&min_distance_intersection, &current_ray, &next_ray);
+
+            let pdf = model.material.BRDF_importance_pdf(&min_distance_intersection, &current_ray, &next_ray);
+
+            throughput = throughput * brdf / pdf;
+
+            current_ray = next_ray;
         }
 
-        energy_acc
+        energy
     }
 
     pub fn render(&self, camera: &Camera, scene: &Scene, frame: &mut Frame) {
