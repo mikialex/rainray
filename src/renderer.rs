@@ -61,11 +61,19 @@ impl Renderer {
 
             energy += material.collect_energy(&current_ray) * throughput;
 
-            let next_ray = model.material.next_ray(&current_ray, &min_distance_intersection);
+            let next_ray = model
+                .material
+                .next_ray(&current_ray, &min_distance_intersection);
 
-            let brdf = model.material.BRDF(&min_distance_intersection, &current_ray, &next_ray);
+            let brdf = model
+                .material
+                .BRDF(&min_distance_intersection, &current_ray, &next_ray);
 
-            let pdf = model.material.BRDF_importance_pdf(&min_distance_intersection, &current_ray, &next_ray);
+            let pdf = model.material.brdf_importance_pdf(
+                &min_distance_intersection,
+                &current_ray,
+                &next_ray,
+            );
 
             throughput = throughput * brdf / pdf;
 

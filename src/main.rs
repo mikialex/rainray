@@ -16,6 +16,7 @@ use crate::environment::*;
 use crate::frame::*;
 use crate::geometry::*;
 use crate::light::*;
+use crate::material::*;
 use crate::math::*;
 use crate::renderer::*;
 use crate::scene::*;
@@ -31,19 +32,15 @@ fn main() {
         models: vec![
             Rc::new(model::Model::new(
                 Box::new(Sphere::new((-1., -1., -5.), 3.0)),
-                material::Material {
-                    diffuse_color: Color::new(0.95, 0.95, 0.95),
-                },
+                Material::new(),
             )),
-            Rc::new(model::Model {
-                geometry: Box::new(Sphere {
+            Rc::new(model::Model::new(
+                Box::new(Sphere {
                     center: Vec3::new(0., 4., -5.),
                     radius: 1.5,
                 }),
-                material: material::Material {
-                    diffuse_color: Color::new(0.6, 0.4, 0.8),
-                },
-            }),
+                *Material::new().color(0.6, 0.4, 0.8),
+            )),
             Rc::new(model::Model {
                 geometry: Box::new(Sphere {
                     center: Vec3 {
@@ -53,9 +50,7 @@ fn main() {
                     },
                     radius: 2.,
                 }),
-                material: material::Material {
-                    diffuse_color: Color::new(0.8, 0.6, 0.2),
-                },
+                material: *Material::new().color(0.8, 0.6, 0.2),
             }),
         ],
         point_lights: vec![PointLight {
